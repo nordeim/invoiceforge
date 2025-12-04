@@ -1914,3 +1914,615 @@ export default function InvoicesNew() {
   )
 }
 ```
+
+Step 8.3.2: Create Edit Invoice Page
+
+```tsx
+// app/frontend/pages/Invoices/Edit.tsx
+import { useState, useMemo, useCallback } from "react"
+import { router, Link } from "@inertiajs/react"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { 
+  ClientSelector, 
+  DatePicker, 
+  LineItemsEditor, 
+  InvoiceSummary 
+} from "@/components/invoices"
+import { StatusBadge } from "@/components/shared/StatusBadge"
+import { mockClients, mockInvoices } from "@/lib/mock-data"
+import { formatCurrency } from "@/lib/utils"
+import { calculateTotals } from "@/lib/invoice-utils"
+import { ArrowLeft, Save, Send, Eye } from "lucide-react"
+import type { LineItem, Invoice } from "@/lib/types"
+
+interface EditInvoiceProps {
+  id: string
+}
+
+/**
+ * Edit Invoice Page — Edit existing invoice
+ */
+export default function InvoicesEdit({ id }: EditInvoiceProps) {
+  // Find the invoice (in real app, would be passed as prop from controller)
+  const existingInvoice = mockInvoices.find(inv => inv.id === id)
+  
+  if (!existingInvoice) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
+            Invoice Not Found
+          </h1>
+          <p className="text-slate-500 mt-2">
+            The invoice you're looking for doesn't exist.
+          </p>
+          <Button className="mt-4" asChild>
+            <Link href="/invoices">Back to Invoices</Link>
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  return <InvoiceEditor invoice={existingInvoice} />
+}
+
+/**
+ * InvoiceEditor — Actual editor component
+ */
+function InvoiceEditor({ invoice }: { invoice: Invoice }) {
+  // Form state (initialized from existing invoice)
+  const [clientId, setClientId] = useState<string | null>(invoice.clientId)
+  const [issueDate, setIssueDate] = useState<Date | undefined>(
+    new Date(invoice.issueDate)
+  )
+  const [dueDate, setDueDate] = useState<Date | undefined>(
+    new Date(invoice.dueDate)
+  )
+  const [lineItems, setLineItems] = useState<LineItem[]>(invoice.lineItems)
+
+  // Calculate totals
+  const totals = useMemo(() => calculateTotals(lineItems), [lineItems])
+
+  // Status-based permissions
+  const isDraft = invoice.status === 'draft'
+  const canEdit = isDraft || invoice.status === 'pending'
+  const canSend = isDraft
+  const hasPublicLink = !isDraft
+
+  // Handle save
+  const handleSave = useCallback((send: boolean = false) => {
+    const invoiceData = {
+      id: invoice.id,
+      invoiceNumber: invoice.invoiceNumber,
+      clientId,
+      issueDate: issueDate?.toISOString(),
+      dueDate: dueDate?.toISOString(),
+      lineItems,
+      ...totals,
+      status: send ? 'pending' : invoice.status,
+    }
+    
+    console.log('Updating invoice:', invoiceData)
+    
+    alert(`Invoice ${invoice.invoiceNumber} updated!`)
+    router.visit('/invoices')
+  }, [invoice, clientId, issueDate, dueDate, lineItems, totals])
+
+  const handleViewPublic = () => {
+    window.open(`/i/${invoice.token}`, '_blank')
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      {/* Sticky Header */}
+      <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Left: Back + Title + Status */}
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" asChild>
+                <Link href="/invoices" aria-label="Back to invoices">
+                  <ArrowLeft className="h-5 w-5" />
+                </Link>
+              </Button>
+              <div className="flex items-center gap-3">
+                <div>
+                  <h1 className="font-display text-xl tracking-tight text-slate-900 dark:text-slate-50">
+                    Edit Invoice
+                  </h1>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 font-mono">
+                    #{invoice.invoiceNumber}
+                  </p>
+                </div>
+                <StatusBadge status={invoice.status} />
+              </div>
+            </div>
+
+            {/* Right: Actions */}
+            <div className="hidden sm:flex items-center gap-3">
+              {hasPublicLink && (
+                <Button variant="outline" onClick={handleViewPublic}>
+                  <Eye className="h-4 w-4 mr-2" />
+                  View Public
+                </Button>
+              )}
+              <Button variant="outline" onClick={() => handleSave(false)}>
+                <Save className="h-4 w-4 mr-2" />
+                Save
+              </Button>
+              {canSend && (
+                <Button onClick={() => handleSave(true)}>
+                  <Send className="h-4 w-4 mr-2" />
+                  Save & Send
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32 sm:pb-8">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm">
+          {/* Client & Dates Section */}
+          <div className="p-6 border-b border-slate-200 dark:border-slate-800">
+            <div className="grid gap-6 sm:grid-cols-3">
+              {/* Client Selector */}
+              <div className="sm:col-span-1">
+                <Label htmlFor="client" className="mb-2 block">
+                  Client <span className="text-rose-500">*</span>
+                </Label>
+                <ClientSelector
+                  clients={mockClients}
+                  selectedClientId={clientId}
+                  onSelect={setClientId}
+                  placeholder="Select client..."
+                  disabled={!canEdit}
+                />
+              </div>
+
+              {/* Issue Date */}
+              <div>
+                <Label htmlFor="issueDate" className="mb-2 block">
+                  Issue Date
+                </Label>
+                <DatePicker
+                  date={issueDate}
+                  onSelect={setIssueDate}
+                  placeholder="Select date"
+                  disabled={!canEdit}
+                />
+              </div>
+
+              {/* Due Date */}
+              <div>
+                <Label htmlFor="dueDate" className="mb-2 block">
+                  Due Date
+                </Label>
+                <DatePicker
+                  date={dueDate}
+                  onSelect={setDueDate}
+                  placeholder="Select date"
+                  disabled={!canEdit}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Line Items Section */}
+          <div className="p-6 border-b border-slate-200 dark:border-slate-800">
+            <LineItemsEditor
+              lineItems={lineItems}
+              onChange={setLineItems}
+              invoiceId={invoice.id}
+              disabled={!canEdit}
+            />
+          </div>
+
+          {/* Summary Section */}
+          <div className="p-6">
+            <InvoiceSummary
+              subtotal={totals.subtotal}
+              totalDiscount={totals.totalDiscount}
+              total={totals.total}
+            />
+          </div>
+        </div>
+      </main>
+
+      {/* Sticky Footer (Mobile) */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 shadow-lg">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Total</p>
+            <p className="font-mono text-lg font-bold text-slate-900 dark:text-slate-50">
+              {formatCurrency(totals.total)}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => handleSave(false)}>
+              Save
+            </Button>
+            {canSend && (
+              <Button size="sm" onClick={() => handleSave(true)}>
+                Send
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+```
+
+---
+
+Phase 9: Validation & QA
+9.1 Validation Checklist
+
+```markdown
+## Day 5 Final Validation Checklist
+
+### Sticky Header
+- [ ] Header sticks to top on scroll
+- [ ] Back button navigates to /invoices
+- [ ] Invoice number displayed in monospace
+- [ ] "Save Draft" and "Save & Send" buttons visible on desktop
+- [ ] Buttons hidden on mobile (shown in footer)
+
+### Client Selector
+- [ ] Opens searchable dropdown
+- [ ] Shows client avatar, name, company
+- [ ] Search filters by name, company, email
+- [ ] Selected client displays in button
+- [ ] Clear button removes selection
+- [ ] Has proper label with required indicator
+
+### Date Pickers
+- [ ] Issue date picker opens calendar
+- [ ] Due date picker opens calendar
+- [ ] Selected dates display formatted
+- [ ] Default issue date is today
+- [ ] Default due date is 30 days from now
+
+### Line Items Editor
+- [ ] Empty state shows when no items
+- [ ] "Add Item" creates new item row
+- [ ] "Add Section" creates section header row
+- [ ] "Add Discount" creates discount row
+- [ ] Item row has: description, quantity, unit type, price, total
+- [ ] Section row has: description (spans width)
+- [ ] Discount row has: description, amount (shows negative)
+- [ ] Delete button removes item
+- [ ] Line totals calculate correctly
+
+### Line Item Types
+- [ ] Regular items: gray background
+- [ ] Section headers: darker background with "Section:" label
+- [ ] Discounts: rose background with "Discount:" label
+
+### Invoice Summary
+- [ ] Subtotal calculates correctly
+- [ ] Discount shows (only if > 0)
+- [ ] Total = Subtotal - Discount
+- [ ] Values in monospace font
+- [ ] Right-aligned layout
+
+### Calculations
+- [ ] Adding item updates totals
+- [ ] Changing quantity updates line total and invoice total
+- [ ] Changing price updates line total and invoice total
+- [ ] Adding discount reduces total
+- [ ] Removing items updates totals
+
+### Mobile Sticky Footer
+- [ ] Footer shows total on mobile
+- [ ] Save and Send buttons in footer
+- [ ] Footer has shadow and border
+
+### Form Submission
+- [ ] "Save Draft" logs data with status: 'draft'
+- [ ] "Save & Send" logs data with status: 'pending'
+- [ ] Navigation back to /invoices after save
+
+### Edit Mode
+- [ ] Pre-fills client from existing invoice
+- [ ] Pre-fills dates from existing invoice
+- [ ] Pre-fills line items from existing invoice
+- [ ] Shows current status badge
+- [ ] Shows "View Public" button (if not draft)
+
+### Responsive Behavior
+- [ ] No horizontal scroll at 375px
+- [ ] Grid stacks on mobile (client, dates)
+- [ ] Line item rows stack/adjust on mobile
+- [ ] Footer visible on mobile, hidden on desktop
+
+### Accessibility
+- [ ] All form fields have labels
+- [ ] Required fields marked
+- [ ] Date pickers keyboard accessible
+- [ ] Client selector keyboard accessible
+- [ ] Focus management in popovers
+
+### Dark Mode
+- [ ] All components adapt to dark mode
+- [ ] Calendar has dark styling
+- [ ] Dropdowns have dark styling
+- [ ] Line items have dark backgrounds
+```
+
+9.2 Manual Testing Procedure
+
+```markdown
+## Testing Steps
+
+### 1. Start Development Servers
+```bash
+bin/rails server
+bin/vite dev
+```
+
+### 2. New Invoice Page
+Navigate to http://localhost:3000/invoices/new
+Verify sticky header with "New Invoice" and invoice number
+Verify "Save Draft" and "Save & Send" buttons (desktop)
+
+### 3. Client Selector Testing
+Click client selector
+Verify dropdown opens with search
+Type "Acme" to filter
+Click on Acme Corporation
+Verify client displays in button with avatar
+Click X to clear
+Verify placeholder returns
+
+### 4. Date Picker Testing
+Click Issue Date picker
+Verify calendar opens
+Select a date
+Verify date displays formatted
+Repeat for Due Date
+
+### 5. Line Items Testing
+Verify one blank item exists
+Fill in description: "Web Development"
+Set quantity: 10
+Select unit type: Hours
+Set unit price: 150
+Verify line total: S$1,500.00
+Click "Add Item"
+Verify second row appears
+Fill in: "Design Work", 5 days, $800
+Verify line total: S$4,000.00
+Verify subtotal: S$5,500.00
+
+### 6. Section Header Testing
+Click "Add Section"
+Verify section row appears (darker background)
+Enter title: "Additional Services"
+Verify it doesn't affect totals
+
+### 7. Discount Testing
+Click "Add Discount"
+Verify discount row appears (rose background)
+Enter description: "Early Payment Discount"
+Enter amount: 500
+Verify displays as -S$500.00
+Verify total reduced by discount
+
+### 8. Delete Item Testing
+Click X on a line item
+Verify item removed
+Verify totals recalculate
+
+### 9. Mobile Testing
+Set viewport to 375px
+Verify header actions hidden
+Verify sticky footer visible with total
+Verify form fields stack
+Tap "Save Draft" in footer
+Verify navigation works
+
+### 10. Edit Mode Testing
+Navigate to /invoices
+Click on invoice 2025-0001
+Verify Edit page loads with existing data
+Verify client pre-selected
+Verify dates pre-filled
+Verify line items populated
+Verify totals match
+
+### 11. Dark Mode Testing
+Toggle to dark mode
+Verify header has dark background
+Verify form has dark background
+Verify calendar popup has dark styling
+Verify line items have dark backgrounds
+Verify discount row has dark rose styling
+
+### 12. Calculation Verification
+Using invoice 2025-0001 data:
+
+Section: Development Services (no total)
+Item: Frontend Development, 24 hrs × $150 = $3,600
+Item: API Integration, 16 hrs × $150 = $2,400
+Section: Additional Services (no total)
+Item: Technical Consultation, 2 hrs × $200 = $400
+Discount: Loyalty Discount 5% = -$320
+Subtotal: $6,400
+Discount: $320
+Total: $6,080
+```
+
+
+---
+
+## File Structure Summary (Day 5 Complete)
+
+```text
+app/frontend/
+├── components/
+│ ├── clients/
+│ │ └── ... (Day 3 files)
+│ ├── dashboard/
+│ │ └── ... (Day 2 files)
+│ ├── invoices/
+│ │ ├── index.ts # UPDATED
+│ │ ├── InvoiceFilterTabs.tsx
+│ │ ├── InvoiceRowActions.tsx
+│ │ ├── InvoiceTable.tsx
+│ │ ├── InvoiceCard.tsx
+│ │ ├── InvoiceList.tsx
+│ │ ├── ClientSelector.tsx # NEW
+│ │ ├── DatePicker.tsx # NEW
+│ │ ├── LineItemRow.tsx # NEW
+│ │ ├── SectionHeaderRow.tsx # NEW
+│ │ ├── DiscountRow.tsx # NEW
+│ │ ├── LineItemsEditor.tsx # NEW
+│ │ └── InvoiceSummary.tsx # NEW
+│ ├── layout/
+│ │ └── ... (Day 1 files)
+│ ├── shared/
+│ │ └── ... (Day 2 files)
+│ └── ui/
+│ ├── index.ts # UPDATED
+│ ├── button.tsx
+│ ├── calendar.tsx # NEW
+│ ├── card.tsx
+│ ├── command.tsx # NEW
+│ ├── dropdown-menu.tsx
+│ ├── input.tsx
+│ ├── label.tsx
+│ ├── popover.tsx # NEW
+│ ├── select.tsx # NEW
+│ ├── separator.tsx
+│ ├── sheet.tsx
+│ ├── table.tsx
+│ ├── tabs.tsx
+│ ├── textarea.tsx
+│ └── tooltip.tsx
+├── hooks/
+│ └── useTheme.ts
+├── layouts/
+│ └── AppLayout.tsx
+├── lib/
+│ ├── utils.ts
+│ ├── types.ts
+│ ├── mock-data.ts
+│ └── invoice-utils.ts # NEW
+├── pages/
+│ ├── Dashboard.tsx
+│ ├── Clients/
+│ │ └── Index.tsx
+│ └── Invoices/
+│ ├── Index.tsx
+│ ├── New.tsx # UPDATED (full implementation)
+│ └── Edit.tsx # UPDATED (full implementation)
+└── entrypoints/
+├── inertia.tsx
+└── application.css
+```
+
+---
+
+## Day 5 Success Criteria
+
+```text
+| Criterion | Validation Method | Status |
+|-----------|-------------------|--------|
+| Sticky header works | Scroll page, verify header stays | ⬜ |
+| Back button navigates | Click back, verify navigation | ⬜ |
+| Client selector works | Select/clear client | ⬜ |
+| Date pickers work | Select dates, verify display | ⬜ |
+| Line items can be added | Add item/section/discount | ⬜ |
+| Line items can be edited | Change values, verify update | ⬜ |
+| Line items can be deleted | Delete item, verify removal | ⬜ |
+| Line totals calculate | Check item × price = total | ⬜ |
+| Subtotal calculates | Sum of all item totals | ⬜ |
+| Discount calculates | Discount reduces total | ⬜ |
+| Final total calculates | Subtotal - Discount | ⬜ |
+| Mobile footer shows | Check at 375px | ⬜ |
+| Form submits | Click save, verify log | ⬜ |
+| Edit mode loads data | Open existing invoice | ⬜ |
+| Dark mode adapts | Toggle theme, verify | ⬜ |
+| Accessibility passes | Tab navigation, labels | ⬜ |
+---
+
+## Invoice Editor Preview
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STICKY HEADER │
+│ ┌─────────────────────────────────────────────────────────────────────────┐│
+│ │ ← │ New Invoice [Save Draft] [Save & Send] ││
+│ │ │ #2025-0003 ││
+│ └─────────────────────────────────────────────────────────────────────────┘│
+├─────────────────────────────────────────────────────────────────────────────┤
+│ │
+│ ┌─────────────────────────────────────────────────────────────────────────┐│
+│ │ ││
+│ │ CLIENT & DATES ││
+│ │ ┌─────────────────────┐ ┌────────────────┐ ┌────────────────┐ ││
+│ │ │ Client * │ │ Issue Date │ │ Due Date │ ││
+│ │ │ 🔵 Acme Corporation │ │ 📅 20 Jan 2025 │ │ 📅 19 Feb 2025 │ ││
+│ │ │ Acme Corp Pte │ │ │ │ │ ││
+│ │ └─────────────────────┘ └────────────────┘ └────────────────┘ ││
+│ │ ││
+│ ├─────────────────────────────────────────────────────────────────────────┤│
+│ │ ││
+│ │ LINE ITEMS ││
+│ │ ││
+│ │ ┌───────────────────────────────────────────────────────────────────┐ ││
+│ │ │ ≡ │ Section: Development Services [×] │ ││
+│ │ └───────────────────────────────────────────────────────────────────┘ ││
+│ │ ││
+│ │ ┌───────────────────────────────────────────────────────────────────┐ ││
+│ │ │ ≡ │ Frontend Development │ 24 │ hrs │ $150 │ S$3,600.00 [×] │ ││
+│ │ └───────────────────────────────────────────────────────────────────┘ ││
+│ │ ││
+│ │ ┌───────────────────────────────────────────────────────────────────┐ ││
+│ │ │ ≡ │ API Integration │ 16 │ hrs │ $150 │ S$2,400.00 [×] │ ││
+│ │ └───────────────────────────────────────────────────────────────────┘ ││
+│ │ ││
+│ │ ┌───────────────────────────────────────────────────────────────────┐ ││
+│ │ │ ≡ │ Discount: Loyalty 5% │ -S$320.00 [×] │ ││
+│ │ └───────────────────────────────────────────────────────────────────┘ ││
+│ │ ││
+│ │ [+ Add Item] [+ Add Section] [+ Add Discount] ││
+│ │ ││
+│ ├─────────────────────────────────────────────────────────────────────────┤│
+│ │ ││
+│ │ SUMMARY ││
+│ │ Subtotal: S$6,400.00 ││
+│ │ Discount: -S$320.00 ││
+│ │ ───────────────────────── ││
+│ │ TOTAL: S$6,080.00 ││
+│ │ ││
+│ └─────────────────────────────────────────────────────────────────────────┘│
+│ │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ MOBILE STICKY FOOTER │
+│ ┌─────────────────────────────────────────────────────────────────────────┐│
+│ │ Total [Save Draft] [Save & Send] ││
+│ │ S$6,080.00 ││
+│ └─────────────────────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Ready for Implementation
+
+This comprehensive Day 5 plan includes:
+
+1. ✅ **9 detailed phases** with clear objectives
+2. ✅ **Complete code** for all new components
+3. ✅ **v4.2 design tokens** strictly followed
+4. ✅ **Client selector** with search functionality
+5. ✅ 
