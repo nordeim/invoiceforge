@@ -1,4 +1,0 @@
-// app/frontend/entrypoints/inertia.tsx (add at top)
-import './application.css'
-import { createInertiaApp } from '@inertiajs/react'
-// ... rest of file
