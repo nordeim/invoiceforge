@@ -81,6 +81,7 @@ Before proceeding, please confirm:
 **Step 1.3.1: Add Gems to Gemfile**
 
 ```ruby
+# File: Gemfile
 # Gemfile - Add these gems
 
 # Inertia.js Rails adapter
@@ -89,12 +90,14 @@ gem 'inertia_rails'
 
 Run:
 ```bash
+# File: install_script-1.sh
 bundle install
 ```
 
 **Step 1.3.2: Install JavaScript Dependencies**
 
 ```bash
+# File: install_script-2.sh
 # Install Inertia.js React adapter and React
 npm install @inertiajs/react react react-dom
 
@@ -191,6 +194,7 @@ createInertiaApp({
 **Step 1.3.6: Update Application Layout**
 
 ```erb
+// app/views/layouts/application.html.erb
 <!-- app/views/layouts/application.html.erb -->
 <!DOCTYPE html>
 <html lang="en" class="h-full">
@@ -220,7 +224,7 @@ createInertiaApp({
 **Step 1.3.7: Create Test Dashboard Controller**
 
 ```ruby
-# app/controllers/dashboard_controller.rb
+# File: app/controllers/dashboard_controller.rb
 class DashboardController < ApplicationController
   def index
     render inertia: 'Dashboard'
@@ -231,7 +235,7 @@ end
 **Step 1.3.8: Configure Routes**
 
 ```ruby
-# config/routes.rb
+# File: config/routes.rb
 Rails.application.routes.draw do
   root "dashboard#index"
   get "dashboard", to: "dashboard#index"
@@ -255,6 +259,7 @@ export default function Dashboard() {
 ### 1.4 Phase 1 Validation
 
 ```bash
+# File: start_rails_server.sh
 # Start the Rails server
 bin/rails server
 
@@ -293,6 +298,7 @@ bin/vite dev
 **Step 2.3.1: Install Tailwind v4**
 
 ```bash
+# File: install_script-3.sh
 npm install tailwindcss @tailwindcss/vite
 ```
 
@@ -323,6 +329,7 @@ export default defineConfig({
 **Step 2.3.3: Create Complete Application CSS with v4.2 Design System**
 
 ```css
+// app/assets/stylesheets/application.css
 /* app/assets/stylesheets/application.css */
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -436,6 +443,7 @@ export default defineConfig({
 **Step 2.3.4: Create Vite CSS Entrypoint**
 
 ```css
+// app/frontend/entrypoints/application.css
 /* app/frontend/entrypoints/application.css */
 @import "../../assets/stylesheets/application.css";
 ```
@@ -452,6 +460,7 @@ import { createInertiaApp } from '@inertiajs/react'
 Or update the layout to use Vite's CSS handling:
 
 ```erb
+// app/views/layouts/application.html.erb
 <!-- app/views/layouts/application.html.erb -->
 <!-- Replace vite_stylesheet_tag with: -->
 <%= vite_stylesheet_tag 'application' %>
@@ -544,6 +553,7 @@ export default function Dashboard() {
 **Step 3.3.1: Install ShadCN Dependencies**
 
 ```bash
+# File: install_script-4.sh
 npm install clsx tailwind-merge class-variance-authority lucide-react
 npm install @radix-ui/react-slot @radix-ui/react-dialog @radix-ui/react-separator @radix-ui/react-tooltip
 ```
@@ -1936,7 +1946,7 @@ export default function InvoicesIndex() {
 **Step 6.2.3: Update Rails Controllers**
 
 ```ruby
-# app/controllers/clients_controller.rb
+# File: app/controllers/clients_controller.rb
 class ClientsController < ApplicationController
   def index
     render inertia: 'Clients/Index'
@@ -1945,7 +1955,7 @@ end
 ```
 
 ```ruby
-# app/controllers/invoices_controller.rb
+# File: app/controllers/invoices_controller.rb
 class InvoicesController < ApplicationController
   def index
     render inertia: 'Invoices/Index'
@@ -1956,7 +1966,7 @@ end
 **Step 6.2.4: Update Routes**
 
 ```ruby
-# config/routes.rb
+# File: config/routes.rb
 Rails.application.routes.draw do
   root "dashboard#index"
   
@@ -2023,11 +2033,11 @@ end
 
 ### 7.2 Manual Testing Procedure
 
-```markdown
 ## Testing Steps
 
 ### 1. Start Development Servers
 ```bash
+# File: start_dev_server.sh
 # Terminal 1
 bin/rails server
 
@@ -2066,7 +2076,6 @@ bin/vite dev
 4. Verify it's rgb(255, 255, 255) = white
 5. Toggle to dark mode
 6. Verify canvas is slate-950, cards are slate-900
-```
 
 ---
 

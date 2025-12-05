@@ -1,0 +1,24 @@
+<!-- app/views/layouts/application.html.erb -->
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvoiceForge</title>
+    
+    <!-- Google Fonts: Instrument Serif + Geist + Geist Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'inertia' %>
+    <%= vite_stylesheet_tag 'application', media: 'all' %>
+  </head>
+  <body class="h-full">
+    <%= yield %>
+  </body>
+</html>

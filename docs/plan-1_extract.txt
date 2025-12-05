@@ -1,0 +1,65 @@
+$ python3 extract_code_files.py docs/plan-1.md 
+Processing compacted file: docs/plan-1.md
+Input file encoding detected as: utf-8
+Extracted: Gemfile
+Extracted: install_script-1.sh
+Extracted: install_script-2.sh
+Extracted: vite.config.ts
+Extracted: tsconfig.json
+  Created directory: app/frontend/entrypoints
+Extracted: app/frontend/entrypoints/inertia.tsx
+  Created directory: app/views/layouts
+Extracted: app/views/layouts/application.html.erb
+  Created directory: app/controllers
+Extracted: app/controllers/dashboard_controller.rb
+  Created directory: config
+Extracted: config/routes.rb
+Extracted: app/frontend/pages/Dashboard.tsx
+Extracted: start_rails_server.sh
+Extracted: install_script-3.sh
+Extracted: vite.config.ts (updated)
+  Created directory: app/assets/stylesheets
+Extracted: app/assets/stylesheets/application.css
+Extracted: app/frontend/entrypoints/application.css
+Extracted: app/frontend/entrypoints/inertia.tsx (add at top)
+  Warning: Overwriting file: app/views/layouts/application.html.erb
+Extracted: app/views/layouts/application.html.erb
+Extracted: app/frontend/pages/Dashboard.tsx (temporary test version)
+Extracted: install_script-4.sh
+Extracted: app/frontend/lib/utils.ts
+Extracted: app/frontend/components/ui/button.tsx
+Extracted: app/frontend/components/ui/sheet.tsx
+Extracted: app/frontend/components/ui/separator.tsx
+Extracted: app/frontend/components/ui/tooltip.tsx
+Extracted: app/frontend/lib/types.ts
+  Created directory: app/frontend/hooks
+Extracted: app/frontend/hooks/useTheme.ts
+Extracted: app/frontend/lib/mock-data.ts
+  Created directory: app/frontend/components/layout
+Extracted: app/frontend/components/layout/Logo.tsx
+Extracted: app/frontend/components/layout/ThemeToggle.tsx
+Extracted: app/frontend/components/layout/NavItem.tsx
+Extracted: app/frontend/components/layout/Sidebar.tsx
+Extracted: app/frontend/components/layout/MobileNav.tsx
+Extracted: app/frontend/layouts/AppLayout.tsx
+Extracted: app/frontend/components/layout/index.ts
+  Warning: Overwriting file: app/frontend/components/ui/index.ts
+Extracted: app/frontend/components/ui/index.ts
+  Warning: Overwriting file: app/frontend/pages/Dashboard.tsx
+Extracted: app/frontend/pages/Dashboard.tsx
+  Created directory: app/frontend/pages/Clients
+Extracted: app/frontend/pages/Clients/Index.tsx
+Extracted: app/frontend/pages/Invoices/Index.tsx
+Extracted: app/controllers/clients_controller.rb
+Extracted: app/controllers/invoices_controller.rb
+  Warning: Overwriting file: config/routes.rb
+Extracted: config/routes.rb
+Extracted: start_dev_server.sh
+
+Extraction complete!
+Total code blocks found: 42
+Files successfully extracted: 42
+
+Files overwritten: 4
+Note: Multiple code blocks with the same filename were found; each file contains the content from the last matching block.
+
