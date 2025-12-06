@@ -14,7 +14,8 @@ InvoiceForge is a single-user invoicing application prioritizing "Neo-Editorial 
 - **Invoices**: ⚠️ Mixed Status.
     - `Index.tsx`: Stub/Placeholder (Needs implementation).
     - `Edit.tsx` / `LineItemsEditor.tsx`: **Surprisingly Complete**. Core complex logic for editing lines is largely done.
-- **Backend Setup**: Basic routes exist (`index` only). Controllers are likely stubs serving Inertia pages.
+- **Backend Setup**: Basic routes exist (`index` only).
+- **Patches Applied**: Day 3 CSS additions (Radix animations, slide-out classes) are applied.
 
 ## 2. Technical Architecture & Standards
 

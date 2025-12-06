@@ -18,6 +18,12 @@ Awesome job on your meticulous review, analysis and planning! Please keep up the
 
 ---
 
+Awesome job on your meticulous review, analysis and planning! Please keep up the good work in your rigorous and meticulous approach to planning and execution! Now, please meticulously review and analyze @execution_plan_day-3_patch_to_apply_to_3i.md first, then @execution_plan_day-3_patch_to_apply_to_3i_part-2.md to have a consolidated understanding of the updates/patches needed to prepare for Day 4 to Day 7 implementation. Then check the current codebase to determine whether the consolidated updates/patches for Day 3 have been merged successfully. 
+
+Please use the merging method, and not to overwrite existing files, when applying any suggested patches or updates to avoid introduing regression errors.
+
+---
+
 Awesome job on meticulous analysis, planning and execution! Please keep up the good work in your rigorous and meticulous approach to planning and execution! Yes, please meticulously proceed with your implementation plan for `PRD_v4.md`. Make sure you validate the `PRD_v4.md` after generation to ensure its completeness, correctness and accuracy (according to your specifications in the planning).
 
 ---
