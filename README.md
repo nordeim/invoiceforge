@@ -279,12 +279,12 @@ npm run lint        # TypeScript/React linting
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/invoiceforge.git
+   git clone https://github.com/nordeim/invoiceforge.git
    cd invoiceforge
    ```
 3. **Add upstream remote**:
    ```bash
-   git remote add upstream https://github.com/original/invoiceforge.git
+   git remote add upstream https://github.com/nordeim/invoiceforge.git
    ```
 4. **Create a feature branch**:
    ```bash
