@@ -1,4 +1,43 @@
 {
+  "name": "invoiceforge",
+  "version": "1.0.0",
+  "description": "Precision invoicing for the solo professional. A Rails 8 + React 18 + Inertia.js application with Neo-Editorial design.",
+  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "InvoiceForge Team"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nordeim/invoiceforge.git"
+  },
+  "keywords": [
+    "invoicing",
+    "rails",
+    "react",
+    "inertia",
+    "typescript",
+    "tailwindcss"
+  ],
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write \"app/frontend/**/*.{ts,tsx,css}\"",
+    "format:check": "prettier --check \"app/frontend/**/*.{ts,tsx,css}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf public/vite node_modules/.vite"
+  },
   "dependencies": {
     "@inertiajs/react": "^2.2.19",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -23,9 +62,31 @@
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "@vitejs/plugin-react": "^5.1.1",
-    "typescript": "^5.9.3"
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.0.0",
+    "eslint-plugin-react": "^7.37.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "prettier": "^3.4.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.0.0",
+    "vitest": "^2.0.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

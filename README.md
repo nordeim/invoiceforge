@@ -87,17 +87,18 @@ We merge two design traditions to create something distinctive:
 - Billing history, last invoice date, contact metadata
 - Responsive table/card layouts with search and filters
 
-### 📄 **Invoice Engine** *(In Progress)*
+### 📄 **Invoice Engine** *(Complete)*
 
 <table>
 <tr>
 <td width="60%">
 
 #### **Intelligent Editor**
-- Line item editor components completed (items, sections, discounts)
-- Real-time totals utilities ready for integration
-- Client selector and date pickers prepared
-- Pages for new/edit invoices still placeholders awaiting wiring
+- Full invoice creation and editing forms
+- Line item editor with items, sections, discounts
+- Real-time totals with precision rounding
+- Client selector and date pickers
+- Status-aware editing restrictions
 
 #### **Status Workflow**
 ```mermaid
@@ -115,9 +116,11 @@ stateDiagram-v2
 <td width="40%">
 
 #### **Shareable & Printable**
-- Public invoice page with token lookup and print styles
-- Mock payment modal illustrating planned Stripe integration
-- Mobile-friendly presentation with status badge emphasis
+- Public invoice page with token lookup
+- Print-optimized CSS with hidden UI elements
+- Mock payment modal (Stripe integration ready)
+- Mobile-friendly presentation
+- Status badge emphasis
 
 </td>
 </tr>
@@ -479,15 +482,16 @@ InvoiceForge uses a **strict 4px base unit** (Tailwind's default):
 
 ## 🗺 Roadmap
 
-### Phase 1: Frontend Prototype (Current)
-**Status**: In Development
+### Phase 1: Frontend Prototype *(Complete ✅)*
+**Status**: Complete
 - [x] **Day 1**: Environment setup, layout shell, design tokens
 - [x] **Day 2**: Dashboard metrics, recent invoices, activity feed
 - [x] **Day 3**: Clients directory (table, cards, form sheets)
 - [x] **Day 4**: Invoices index with filters, table/card views, actions
-- [ ] **Day 5**: Invoice editor page integration (pending wiring)
+- [x] **Day 5**: Invoice editor pages (New.tsx, Edit.tsx with full integration)
 - [x] **Day 6**: Public invoice view with print optimization and payment modal
-- [ ] **Day 7**: Accessibility audit and responsive QA (to schedule)
+- [x] **Day 7**: Additional public invoice components (BilledTo, Notes, NotFound)
+- [x] **Day 8**: Accessibility audit (SkipLink, LiveRegion, WCAG AA compliance)
 
 ### Phase 2: Backend Integration
 **Planned**: Q1 2025
@@ -571,15 +575,16 @@ graph LR
 | **Dashboard** | ✅ Complete | n/a | Metrics & activity feed using mock data |
 | **Clients** | ✅ Complete | n/a | Responsive table/card views, form sheets |
 | **Invoices List** | ✅ Complete | n/a | Filters, status badges, contextual actions |
-| **Invoice Editor Pages** | ⚠️ In Progress | n/a | New/Edit pages still placeholders; editor components ready |
+| **Invoice Editor** | ✅ Complete | n/a | New/Edit pages with full line item editor |
 | **Public Invoice** | ✅ Complete | n/a | Token lookup, print styles, payment modal |
 | **Theme System** | ✅ Complete | n/a | Light/dark toggle with persistence |
-| **Responsive Design** | ✅ Complete | n/a | Validated across 375px–desktop
+| **Responsive Design** | ✅ Complete | n/a | Validated across 375px–desktop |
+| **Accessibility** | ✅ Complete | n/a | WCAG AA, skip links, screen reader support |
 
 </div>
 
-**Latest Milestone**: Frontend prototype (Dashboard, Clients, Invoices index, Public invoice)  
-**Next Milestone**: Day 5 editor integration & accessibility QA
+**Latest Milestone**: Phase 1 Complete - Full frontend prototype with all views  
+**Next Milestone**: Phase 2 - Backend integration with database persistence
 
 ## 📚 Additional Resources
 
