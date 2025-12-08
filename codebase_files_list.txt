@@ -1,4 +1,5 @@
 $ find package.json  config/ app/ tsconfig.json vite.config.ts Gemfile README.md bundle_install.sh manual_testing_procedure* start_dev_server.sh start_rails_server.sh -type f
+```text
 package.json
 config/routes.rb
 app/views/layouts/application.html.erb
@@ -7,6 +8,7 @@ app/controllers/clients_controller.rb
 app/controllers/dashboard_controller.rb
 app/controllers/invoices_controller.rb
 app/frontend/pages/Dashboard.tsx
+app/frontend/pages/Dashboard.tsx.1
 app/frontend/pages/Clients/Index.tsx
 app/frontend/pages/PublicInvoice/Show.tsx
 app/frontend/pages/Dashboard.tsx.test
@@ -33,10 +35,12 @@ app/frontend/components/ui/tooltip.tsx
 app/frontend/components/ui/card.tsx
 app/frontend/components/ui/command.tsx
 app/frontend/components/ui/table.tsx
+app/frontend/components/ui/select.tsx.bak
 app/frontend/components/ui/separator.tsx
 app/frontend/components/ui/dropdown-menu.tsx
 app/frontend/components/ui/button.tsx
 app/frontend/components/ui/index.ts
+app/frontend/components/ui/tabs.tsx
 app/frontend/components/ui/sheet.tsx
 app/frontend/components/ui/calendar.tsx
 app/frontend/components/ui/label.tsx
@@ -47,10 +51,15 @@ app/frontend/components/dashboard/RecentInvoices.tsx
 app/frontend/components/dashboard/MetricCard.tsx
 app/frontend/components/dashboard/ActivityItem.tsx
 app/frontend/components/dashboard/index.ts
+app/frontend/components/invoices/InvoiceRowActions.tsx
+app/frontend/components/invoices/InvoiceCard.tsx
 app/frontend/components/invoices/LineItemRow.tsx
 app/frontend/components/invoices/DatePicker.tsx
 app/frontend/components/invoices/SectionHeaderRow.tsx
+app/frontend/components/invoices/InvoiceTable.tsx
+app/frontend/components/invoices/InvoiceFilterTabs.tsx
 app/frontend/components/invoices/ClientSelector.tsx
+app/frontend/components/invoices/InvoiceList.tsx
 app/frontend/components/invoices/InvoiceSummary.tsx
 app/frontend/components/invoices/DiscountRow.tsx
 app/frontend/components/invoices/index.ts
@@ -79,6 +88,8 @@ README.md
 bundle_install.sh
 manual_testing_procedure-2.md
 manual_testing_procedure-3.md
+manual_testing_procedure-4.md
 manual_testing_procedure.md
 start_dev_server.sh
 start_rails_server.sh
+```
