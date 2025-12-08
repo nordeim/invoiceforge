@@ -1,16 +1,17 @@
 // app/frontend/components/ui/index.ts
 export { Button, buttonVariants } from './button'
 export { Calendar } from './calendar'
-export { 
-  Card, 
-  CardHeader, 
-  CardFooter, 
-  CardTitle, 
-  CardDescription, 
-  CardContent 
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent
 } from './card'
 export {
   Command,
+  CommandDialog,
   CommandInput,
   CommandList,
   CommandEmpty,
@@ -18,6 +19,7 @@ export {
   CommandItem,
   CommandShortcut,
   CommandSeparator,
+  CommandLoading,
 } from './command'
 export {
   DropdownMenu,
@@ -38,7 +40,8 @@ export {
 } from './dropdown-menu'
 export { Input } from './input'
 export { Label } from './label'
-export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from './popover'
+export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor, PopoverClose } from './popover'
+
 export {
   Select,
   SelectGroup,
@@ -50,15 +53,15 @@ export {
   SelectSeparator,
 } from './select'
 export { Separator } from './separator'
-export { 
-  Sheet, 
-  SheetContent, 
-  SheetHeader, 
+export {
+  Sheet,
+  SheetContent,
+  SheetHeader,
   SheetFooter, // Included for Day 5+ 
-  SheetTitle, 
+  SheetTitle,
   SheetTrigger,
   SheetDescription,
-  SheetClose 
+  SheetClose
 } from './sheet'
 export {
   Table,
@@ -72,9 +75,9 @@ export {
 } from './table'
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
 export { Textarea } from './textarea'
-export { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
-  TooltipTrigger 
+export {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
 } from './tooltip'
