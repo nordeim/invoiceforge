@@ -30,17 +30,18 @@ export function InvoiceFilterTabs({
   onFilterChange,
   className,
 }: InvoiceFilterTabsProps) {
-  // Calculate counts
-  const counts = {
+  // Calculate counts for all statuses
+  const counts: Record<FilterValue, number> = {
     all: invoices.length,
     draft: invoices.filter(inv => inv.status === 'draft').length,
     pending: invoices.filter(inv => inv.status === 'pending').length,
     paid: invoices.filter(inv => inv.status === 'paid').length,
     overdue: invoices.filter(inv => inv.status === 'overdue').length,
+    cancelled: invoices.filter(inv => inv.status === 'cancelled').length,
   }
 
   return (
-    <div 
+    <div
       className={cn(
         "flex flex-wrap gap-2",
         className
@@ -71,12 +72,13 @@ const filterOptions: Array<{
   label: string
   colorClass?: string
 }> = [
-  { value: 'all', label: 'All' },
-  { value: 'draft', label: 'Draft', colorClass: 'data-[active=true]:border-slate-400' },
-  { value: 'pending', label: 'Pending', colorClass: 'data-[active=true]:border-amber-500' },
-  { value: 'paid', label: 'Paid', colorClass: 'data-[active=true]:border-emerald-500' },
-  { value: 'overdue', label: 'Overdue', colorClass: 'data-[active=true]:border-rose-500' },
-]
+    { value: 'all', label: 'All' },
+    { value: 'draft', label: 'Draft', colorClass: 'data-[active=true]:border-slate-400' },
+    { value: 'pending', label: 'Pending', colorClass: 'data-[active=true]:border-amber-500' },
+    { value: 'paid', label: 'Paid', colorClass: 'data-[active=true]:border-emerald-500' },
+    { value: 'overdue', label: 'Overdue', colorClass: 'data-[active=true]:border-rose-500' },
+    { value: 'cancelled', label: 'Cancelled', colorClass: 'data-[active=true]:border-slate-400' },
+  ]
 
 /**
  * Individual filter tab button
@@ -125,7 +127,7 @@ function FilterTab({
       )}
     >
       <span>{label}</span>
-      <span 
+      <span
         className={cn(
           "inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs",
           isActive
