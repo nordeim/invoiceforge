@@ -1,0 +1,13 @@
+Payment Received - Thank You!
+
+Dear <%= @client.name %>,
+
+We have received your payment for invoice <%= @invoice.invoice_number %>.
+
+Invoice Number: <%= @invoice.invoice_number %>
+Amount Paid: S$<%= number_with_precision(@invoice.total, precision: 2, delimiter: ',') %>
+Status: PAID
+
+Thank you for your timely payment. We appreciate your business!
+
+If you have any questions, please don't hesitate to contact us.

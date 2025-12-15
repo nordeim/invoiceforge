@@ -1,6 +1,6 @@
 # app/controllers/invoices_controller.rb
 class InvoicesController < ApplicationController
-  before_action :set_invoice, only: [:show, :edit, :update, :destroy, :duplicate, :mark_paid, :mark_sent, :cancel]
+  before_action :set_invoice, only: [:show, :edit, :update, :destroy, :duplicate, :mark_paid, :mark_sent, :cancel, :download_pdf]
 
   # GET /invoices
   def index
@@ -140,6 +140,17 @@ class InvoicesController < ApplicationController
     else
       redirect_to edit_invoice_path(@invoice), alert: 'Failed to cancel invoice.'
     end
+  end
+
+  # GET /invoices/:id/download_pdf
+  def download_pdf
+    generator = InvoicePdfGenerator.new(@invoice)
+    pdf_data = generator.generate
+
+    send_data pdf_data,
+              filename: generator.filename,
+              type: 'application/pdf',
+              disposition: 'attachment'
   end
 
   private

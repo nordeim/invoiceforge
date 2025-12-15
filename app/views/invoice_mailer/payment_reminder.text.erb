@@ -1,0 +1,17 @@
+Payment Reminder
+
+Dear <%= @client.name %>,
+
+This is a friendly reminder that invoice <%= @invoice.invoice_number %> is now <%= @days_overdue %> days overdue.
+
+Invoice Number: <%= @invoice.invoice_number %>
+Due Date: <%= @invoice.due_date.strftime('%d %b %Y') %>
+Days Overdue: <%= @days_overdue %> days
+
+Total Amount Due: S$<%= number_with_precision(@invoice.total, precision: 2, delimiter: ',') %>
+
+Pay Now: <%= @public_url %>
+
+If you have already made the payment, please disregard this reminder.
+
+Thank you for your prompt attention to this matter.

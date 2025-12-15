@@ -1,0 +1,30 @@
+<h1>Payment Reminder</h1>
+
+<p>Dear <%= @client.name %>,</p>
+
+<p>This is a friendly reminder that invoice <strong><%= @invoice.invoice_number %></strong> is now <strong><%= @days_overdue %> days overdue</strong>.</p>
+
+<div class="meta">
+  <div class="meta-row">
+    <span class="meta-label">Invoice Number:</span>
+    <span class="meta-value"><%= @invoice.invoice_number %></span>
+  </div>
+  <div class="meta-row">
+    <span class="meta-label">Due Date:</span>
+    <span class="meta-value"><%= @invoice.due_date.strftime('%d %b %Y') %></span>
+  </div>
+  <div class="meta-row">
+    <span class="meta-label">Days Overdue:</span>
+    <span class="meta-value" style="color: #ef4444;"><%= @days_overdue %> days</span>
+  </div>
+</div>
+
+<p class="amount">S$<%= number_with_precision(@invoice.total, precision: 2, delimiter: ',') %></p>
+
+<p style="text-align: center;">
+  <a href="<%= @public_url %>" class="button">Pay Now</a>
+</p>
+
+<p>If you have already made the payment, please disregard this reminder.</p>
+
+<p>Thank you for your prompt attention to this matter.</p>

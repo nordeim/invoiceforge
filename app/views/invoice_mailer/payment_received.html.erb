@@ -1,0 +1,24 @@
+<h1>Payment Received - Thank You!</h1>
+
+<p>Dear <%= @client.name %>,</p>
+
+<p>We have received your payment for invoice <strong><%= @invoice.invoice_number %></strong>.</p>
+
+<div class="meta">
+  <div class="meta-row">
+    <span class="meta-label">Invoice Number:</span>
+    <span class="meta-value"><%= @invoice.invoice_number %></span>
+  </div>
+  <div class="meta-row">
+    <span class="meta-label">Amount Paid:</span>
+    <span class="meta-value" style="color: #22c55e;">S$<%= number_with_precision(@invoice.total, precision: 2, delimiter: ',') %></span>
+  </div>
+  <div class="meta-row">
+    <span class="meta-label">Status:</span>
+    <span class="meta-value" style="color: #22c55e;">PAID</span>
+  </div>
+</div>
+
+<p>Thank you for your timely payment. We appreciate your business!</p>
+
+<p>If you have any questions, please don't hesitate to contact us.</p>

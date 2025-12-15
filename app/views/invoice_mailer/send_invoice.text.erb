@@ -1,0 +1,17 @@
+Invoice <%= @invoice.invoice_number %>
+
+Dear <%= @client.name %>,
+
+Please find attached your invoice from InvoiceForge.
+
+Invoice Number: <%= @invoice.invoice_number %>
+Issue Date: <%= @invoice.issue_date.strftime('%d %b %Y') %>
+Due Date: <%= @invoice.due_date.strftime('%d %b %Y') %>
+
+Total Amount: S$<%= number_with_precision(@invoice.total, precision: 2, delimiter: ',') %>
+
+View Invoice Online: <%= @public_url %>
+
+If you have any questions about this invoice, please don't hesitate to contact us.
+
+Thank you for your business!
