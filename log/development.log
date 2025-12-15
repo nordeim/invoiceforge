@@ -627,3 +627,125 @@ Started GET "/" for ::1 at 2025-12-15 10:59:00 +0800
 Started GET "/favicon.ico" for ::1 at 2025-12-15 10:59:00 +0800
 Started GET "/" for ::1 at 2025-12-15 11:00:34 +0800
 Started GET "/favicon.ico" for ::1 at 2025-12-15 11:00:34 +0800
+Started GET "/" for ::1 at 2025-12-15 11:08:54 +0800
+  [1m[36mActiveRecord::SchemaMigration Load (2.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Invoiceforge'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+Processing by DashboardController#index as HTML
+Completed 401 Unauthorized in 10ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_in" for ::1 at 2025-12-15 11:08:55 +0800
+Processing by Devise::SessionsController#new as HTML
+  Rendering layout layouts/devise.html.erb
+  Rendering /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/devise-4.9.4/app/views/devise/sessions/new.html.erb within layouts/devise
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/devise-4.9.4/app/views/devise/shared/_links.html.erb (Duration: 13.5ms | GC: 0.0ms)
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/devise-4.9.4/app/views/devise/sessions/new.html.erb within layouts/devise (Duration: 39.2ms | GC: 0.0ms)
+  Rendered layout layouts/devise.html.erb (Duration: 45.0ms | GC: 0.0ms)
+Completed 200 OK in 211ms (Views: 81.2ms | ActiveRecord: 24.8ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/favicon.ico" for ::1 at 2025-12-15 11:08:55 +0800
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started POST "/users/sign_in" for ::1 at 2025-12-15 11:13:27 +0800
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"authenticity_token" => "T0a7aE2ahM4ndMaHMstms5CnBFyuxWCS9ptkM0cm7oiyEcRSo90LrWYgf65_1GkdMwUGa7c6pISJSkd_MeM8yQ", "user" => {"email" => "admin@invoiceforge.app", "password" => "password123", "remember_me" => "1"}, "commit" => "Log in"}
+  [1m[36mUser Load (4.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'admin@invoiceforge.app' ORDER BY "users"."id" ASC LIMIT 1 /*action='create',application='Invoiceforge',controller='sessions'*/[0m
+Redirected to http://localhost:3000/
+Completed 303 See Other in 364ms (ActiveRecord: 4.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for ::1 at 2025-12-15 11:13:27 +0800
+Processing by DashboardController#index as HTML
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  [1m[36mInvoice Sum (2.5ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" IN ('pending', 'overdue') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:27:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (1.1ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'paid' AND "invoices"."updated_at" BETWEEN '2025-11-30 16:00:00' AND '2025-12-31 15:59:59.999999' /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:32:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (0.6ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'paid' AND "invoices"."updated_at" BETWEEN '2024-12-31 16:00:00' AND '2025-12-31 15:59:59.999999' /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:37:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (0.9ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'pending' AND (due_date < '2025-12-15') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:46:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "invoices" WHERE "invoices"."status" = 'pending' AND (due_date < '2025-12-15') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:47:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Load (1.8ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."created_at" DESC LIMIT 5 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:11:in 'Enumerable#map'
+  [1m[36mClient Load (1.3ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" IN (4, 6, 5) /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:11:in 'Enumerable#map'
+  [1m[36mInvoice Load (0.6ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."updated_at" DESC LIMIT 10 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:72:in 'DashboardController#build_recent_activity'
+  [1m[36mCACHE Client Load (0.0ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" IN (4, 6, 5)[0m
+  ↳ app/controllers/dashboard_controller.rb:72:in 'DashboardController#build_recent_activity'
+  [1m[36mClient Load (0.6ms)[0m  [1m[34mSELECT "clients".* FROM "clients" ORDER BY "clients"."created_at" DESC LIMIT 5 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:83:in 'DashboardController#build_recent_activity'
+  Rendering layout layouts/application.html.erb
+  Rendering /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/inertia_rails-3.15.0/app/views/inertia.html.erb within layouts/application
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/inertia_rails-3.15.0/app/views/inertia.html.erb within layouts/application (Duration: 4.1ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 13.8ms | GC: 0.4ms)
+Completed 200 OK in 186ms (Views: 20.8ms | ActiveRecord: 17.2ms (11 queries, 0 cached) | GC: 18.8ms)
+
+
+Started GET "/" for ::1 at 2025-12-15 11:13:30 +0800
+Processing by DashboardController#index as HTML
+  [1m[36mUser Load (14.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  [1m[36mInvoice Sum (0.7ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" IN ('pending', 'overdue') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:27:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (0.6ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'paid' AND "invoices"."updated_at" BETWEEN '2025-11-30 16:00:00' AND '2025-12-31 15:59:59.999999' /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:32:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (0.7ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'paid' AND "invoices"."updated_at" BETWEEN '2024-12-31 16:00:00' AND '2025-12-31 15:59:59.999999' /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:37:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (0.7ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'pending' AND (due_date < '2025-12-15') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:46:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Count (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "invoices" WHERE "invoices"."status" = 'pending' AND (due_date < '2025-12-15') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:47:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Load (0.7ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."created_at" DESC LIMIT 5 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:11:in 'Enumerable#map'
+  [1m[36mClient Load (0.9ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" IN (4, 6, 5) /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:11:in 'Enumerable#map'
+  [1m[36mInvoice Load (0.6ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."updated_at" DESC LIMIT 10 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:72:in 'DashboardController#build_recent_activity'
+  [1m[36mCACHE Client Load (0.0ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" IN (4, 6, 5)[0m
+  ↳ app/controllers/dashboard_controller.rb:72:in 'DashboardController#build_recent_activity'
+  [1m[36mClient Load (2.4ms)[0m  [1m[34mSELECT "clients".* FROM "clients" ORDER BY "clients"."created_at" DESC LIMIT 5 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:83:in 'DashboardController#build_recent_activity'
+  Rendering layout layouts/application.html.erb
+  Rendering /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/inertia_rails-3.15.0/app/views/inertia.html.erb within layouts/application
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/inertia_rails-3.15.0/app/views/inertia.html.erb within layouts/application (Duration: 2.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 11.2ms | GC: 0.0ms)
+Completed 200 OK in 116ms (Views: 16.2ms | ActiveRecord: 22.4ms (11 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/" for ::1 at 2025-12-15 11:16:11 +0800
+Processing by DashboardController#index as HTML
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  [1m[36mInvoice Sum (0.6ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" IN ('pending', 'overdue') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:27:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (1.0ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'paid' AND "invoices"."updated_at" BETWEEN '2025-11-30 16:00:00' AND '2025-12-31 15:59:59.999999' /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:32:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (0.6ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'paid' AND "invoices"."updated_at" BETWEEN '2024-12-31 16:00:00' AND '2025-12-31 15:59:59.999999' /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:37:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (0.6ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'pending' AND (due_date < '2025-12-15') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:46:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "invoices" WHERE "invoices"."status" = 'pending' AND (due_date < '2025-12-15') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:47:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Load (0.7ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."created_at" DESC LIMIT 5 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:11:in 'Enumerable#map'
+  [1m[36mClient Load (0.7ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" IN (4, 6, 5) /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:11:in 'Enumerable#map'
+  [1m[36mInvoice Load (0.6ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."updated_at" DESC LIMIT 10 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:72:in 'DashboardController#build_recent_activity'
+  [1m[36mCACHE Client Load (0.0ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" IN (4, 6, 5)[0m
+  ↳ app/controllers/dashboard_controller.rb:72:in 'DashboardController#build_recent_activity'
+  [1m[36mClient Load (0.6ms)[0m  [1m[34mSELECT "clients".* FROM "clients" ORDER BY "clients"."created_at" DESC LIMIT 5 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:83:in 'DashboardController#build_recent_activity'
+  Rendering layout layouts/application.html.erb
+  Rendering /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/inertia_rails-3.15.0/app/views/inertia.html.erb within layouts/application
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/inertia_rails-3.15.0/app/views/inertia.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 7.3ms | GC: 0.0ms)
+Completed 200 OK in 54ms (Views: 8.8ms | ActiveRecord: 6.7ms (11 queries, 0 cached) | GC: 0.2ms)
+
+

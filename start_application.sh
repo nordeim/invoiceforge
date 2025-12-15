@@ -13,3 +13,16 @@ npm run dev
 
 # Terminal 2:
 source .env && bundle exec rails server
+
+exit 0
+
+###################################
+# Access Points
+Service	URLs:
+- Rails App	http://localhost:3000
+- Vite Dev	http://localhost:3036
+- MailHog	http://localhost:8025
+
+# Login Credentials
+Email: admin@invoiceforge.app
+Password: password123
