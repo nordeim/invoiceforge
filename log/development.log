@@ -553,3 +553,73 @@ Started GET "/favicon.ico" for ::1 at 2025-12-15 10:33:20 +0800
   
 ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
   
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+  [1m[36mActiveRecord::SchemaMigration Load (3.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Invoiceforge'*/[0m
+Started GET "/" for ::1 at 2025-12-15 10:46:26 +0800
+  [1m[36mActiveRecord::SchemaMigration Load (2.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Invoiceforge'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+Processing by DashboardController#index as HTML
+Completed 401 Unauthorized in 9ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_in" for ::1 at 2025-12-15 10:46:27 +0800
+Processing by Devise::SessionsController#new as HTML
+  Rendering layout layouts/devise.html.erb
+  Rendering /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/devise-4.9.4/app/views/devise/sessions/new.html.erb within layouts/devise
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/devise-4.9.4/app/views/devise/shared/_links.html.erb (Duration: 14.5ms | GC: 0.0ms)
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/devise-4.9.4/app/views/devise/sessions/new.html.erb within layouts/devise (Duration: 88.8ms | GC: 49.5ms)
+  Rendered layout layouts/devise.html.erb (Duration: 94.5ms | GC: 49.5ms)
+Completed 200 OK in 281ms (Views: 136.4ms | ActiveRecord: 23.2ms (0 queries, 0 cached) | GC: 65.2ms)
+
+
+Started GET "/favicon.ico" for ::1 at 2025-12-15 10:46:28 +0800
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started POST "/users/sign_in" for ::1 at 2025-12-15 10:47:24 +0800
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"authenticity_token" => "eWUqbgUirflj779pIm-4_14aOExkYeTZ-mRQn05ULx9lVk7-z8SpIrX3l1wapV504dEU3IR6dYz0kwMs_2hbqw", "user" => {"email" => "admin@invoiceforge.app", "password" => "password123", "remember_me" => "1"}, "commit" => "Log in"}
+  [1m[36mUser Load (4.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'admin@invoiceforge.app' ORDER BY "users"."id" ASC LIMIT 1 /*action='create',application='Invoiceforge',controller='sessions'*/[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN /*action='create',application='Invoiceforge',controller='sessions'*/[0m
+  [1m[36mUser Update (4.8ms)[0m  [1m[33mUPDATE "users" SET "remember_created_at" = '2025-12-15 02:47:25.041963', "updated_at" = '2025-12-15 02:47:25.045278' WHERE "users"."id" = 1 /*action='create',application='Invoiceforge',controller='sessions'*/[0m
+  [1m[36mTRANSACTION (13.9ms)[0m  [1m[35mCOMMIT /*action='create',application='Invoiceforge',controller='sessions'*/[0m
+Redirected to http://localhost:3000/
+Completed 303 See Other in 415ms (ActiveRecord: 23.5ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/" for ::1 at 2025-12-15 10:47:25 +0800
+Processing by DashboardController#index as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  [1m[36mInvoice Sum (4.8ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" IN ('pending', 'overdue') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:27:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (1.0ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'paid' AND "invoices"."updated_at" BETWEEN '2025-11-30 16:00:00' AND '2025-12-31 15:59:59.999999' /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:32:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (0.6ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'paid' AND "invoices"."updated_at" BETWEEN '2024-12-31 16:00:00' AND '2025-12-31 15:59:59.999999' /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:37:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Sum (0.8ms)[0m  [1m[34mSELECT SUM("invoices"."total") FROM "invoices" WHERE "invoices"."status" = 'pending' AND (due_date < '2025-12-15') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:46:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Count (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "invoices" WHERE "invoices"."status" = 'pending' AND (due_date < '2025-12-15') /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:47:in 'DashboardController#calculate_metrics'
+  [1m[36mInvoice Load (2.3ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."created_at" DESC LIMIT 5 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:11:in 'Enumerable#map'
+  [1m[36mClient Load (1.3ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" IN (4, 6, 5) /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:11:in 'Enumerable#map'
+  [1m[36mInvoice Load (0.6ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."updated_at" DESC LIMIT 10 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:72:in 'DashboardController#build_recent_activity'
+  [1m[36mCACHE Client Load (0.0ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" IN (4, 6, 5)[0m
+  ↳ app/controllers/dashboard_controller.rb:72:in 'DashboardController#build_recent_activity'
+  [1m[36mClient Load (0.6ms)[0m  [1m[34mSELECT "clients".* FROM "clients" ORDER BY "clients"."created_at" DESC LIMIT 5 /*action='index',application='Invoiceforge',controller='dashboard'*/[0m
+  ↳ app/controllers/dashboard_controller.rb:83:in 'DashboardController#build_recent_activity'
+  Rendering layout layouts/application.html.erb
+  Rendering /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/inertia_rails-3.15.0/app/views/inertia.html.erb within layouts/application
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/inertia_rails-3.15.0/app/views/inertia.html.erb within layouts/application (Duration: 3.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 24.7ms | GC: 0.0ms)
+Completed 500 Internal Server Error in 249ms (ActiveRecord: 19.5ms (11 queries, 0 cached) | GC: 0.0ms)
+
+

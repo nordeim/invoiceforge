@@ -2,12 +2,35 @@
 import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
+import type { LineItem } from "@/lib/types"
 
 interface InvoiceSummaryProps {
   subtotal: number
   totalDiscount: number
   total: number
   className?: string
+}
+
+/**
+ * Calculates invoice totals from line items
+ * Exported for use by PublicInvoiceTotals
+ */
+export function calculateTotals(lineItems: LineItem[]): {
+  subtotal: number
+  totalDiscount: number
+  total: number
+} {
+  const subtotal = lineItems
+    .filter((item) => item.type === "item")
+    .reduce((sum, item) => sum + (item.quantity || 0) * (item.unitPrice || 0), 0)
+
+  const totalDiscount = lineItems
+    .filter((item) => item.type === "discount")
+    .reduce((sum, item) => sum + Math.abs(item.unitPrice || 0), 0)
+
+  const total = subtotal - totalDiscount
+
+  return { subtotal, totalDiscount, total }
 }
 
 /**

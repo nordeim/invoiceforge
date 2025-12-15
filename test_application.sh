@@ -10,5 +10,11 @@
 # Start PostgreSQL + MailHog
 docker compose up -d
 
-# Start Rails server
+# Install the new gem
+source .env && bundle install
+
+# Restart the Rails server
 source .env && bundle exec rails server
+
+# Start Rails server
+#source .env && bundle exec rails server
