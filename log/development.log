@@ -529,3 +529,27 @@ Migrating to DeviseCreateUsers (20251215000004)
   [1m[36mClient Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "clients" /*application='Invoiceforge'*/[0m
   [1m[36mInvoice Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "invoices" /*application='Invoiceforge'*/[0m
   [1m[36mLineItem Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "line_items" /*application='Invoiceforge'*/[0m
+Started GET "/" for ::1 at 2025-12-15 10:33:16 +0800
+  [1m[36mActiveRecord::SchemaMigration Load (2.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Invoiceforge'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <top (required)> at /home/project/invoiceforge/config/routes.rb:6)
+Processing by DashboardController#index as HTML
+Completed 401 Unauthorized in 10ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_in" for ::1 at 2025-12-15 10:33:18 +0800
+Processing by Devise::SessionsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/devise-4.9.4/app/views/devise/sessions/new.html.erb within layouts/application
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/devise-4.9.4/app/views/devise/shared/_links.html.erb (Duration: 13.9ms | GC: 0.0ms)
+  Rendered /home/pete/.local/share/mise/installs/ruby/3.4.7/lib/ruby/gems/3.4.0/gems/devise-4.9.4/app/views/devise/sessions/new.html.erb within layouts/application (Duration: 39.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 47.9ms | GC: 0.0ms)
+Completed 500 Internal Server Error in 213ms (ActiveRecord: 21.8ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/favicon.ico" for ::1 at 2025-12-15 10:33:20 +0800
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  

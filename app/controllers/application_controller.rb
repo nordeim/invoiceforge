@@ -9,6 +9,9 @@ class ApplicationController < ActionController::Base
   # Add flash types for Inertia
   add_flash_types :success, :error, :warning, :info
   
+  # Use custom layout for Devise controllers
+  layout :layout_by_resource
+  
   # Share flash messages with Inertia
   inertia_share flash: -> { flash.to_hash }
   
@@ -31,4 +34,15 @@ class ApplicationController < ActionController::Base
   
   # Share errors if any
   inertia_share errors: -> { session.delete(:errors) || {} }
+
+  private
+
+  # Use 'devise' layout for Devise controllers, 'application' for others
+  def layout_by_resource
+    if devise_controller?
+      'devise'
+    else
+      'application'
+    end
+  end
 end
