@@ -1,0 +1,22 @@
+# PostgreSQL v16 Configuration for InvoiceForge
+# All environments use PostgreSQL for consistency
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("PGHOST") { "localhost" } %>
+  username: <%= ENV.fetch("PGUSER") { "postgres" } %>
+  password: <%= ENV.fetch("PGPASSWORD") { "" } %>
+
+development:
+  <<: *default
+  database: invoiceforge_development
+
+test:
+  <<: *default
+  database: invoiceforge_test
+
+production:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
