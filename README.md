@@ -5,8 +5,9 @@
 
 <div align="center">
 
-[![Ruby on Rails 8](https://img.shields.io/badge/Ruby%20on%20Rails-8.0-CC0000?style=for-the-badge&logo=rubyonrails&logoColor=white)](https://rubyonrails.org)
+[![Ruby on Rails 8.1](https://img.shields.io/badge/Ruby%20on%20Rails-8.1.1-CC0000?style=for-the-badge&logo=rubyonrails&logoColor=white)](https://rubyonrails.org)
 [![React 18](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org)
+[![PostgreSQL 16](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
@@ -139,11 +140,13 @@ stateDiagram-v2
 
 | Layer | Technology | Why We Chose It |
 | :--- | :--- | :--- |
-| **Backend** | Ruby on Rails 8.x | **Stability + Productivity** - Convention over configuration, SQLite production-ready |
-| **Frontend Bridge** | Inertia.js (Rails) | **SPA Experience, Monolithic Simplicity** - No separate API layer, server-side rendering benefits |
-| **UI Framework** | React 18 + TypeScript 5.9 | **Type Safety + Component Architecture** - Predictable UI with strong typing |
-| **Styling** | Tailwind CSS v4 | **Design System in CSS** - Utility-first with CSS-native theme configuration |
-| **Components** | ShadCN-style Radix primitives | **Accessible Primitives** - Unstyled, fully customizable, no vendor lock-in |
+| **Backend** | Ruby on Rails 8.1.1 | **Stability + Productivity** - Convention over configuration |
+| **Database** | PostgreSQL 16 (Docker) | **Reliability + Features** - Production-grade RDBMS with JSON support |
+| **Frontend Bridge** | Inertia.js (Rails) | **SPA Experience, Monolithic Simplicity** - No separate API layer |
+| **UI Framework** | React 18 + TypeScript 5.9 | **Type Safety + Component Architecture** - Predictable UI |
+| **Styling** | Tailwind CSS v4 | **Design System in CSS** - Utility-first with CSS-native theme |
+| **Build Tool** | Vite + esbuild | **Fast Builds** - Using esbuild JSX (React plugin disabled for Rails proxy compatibility) |
+| **Components** | ShadCN-style Radix primitives | **Accessible Primitives** - Unstyled, fully customizable |
 | **Icons** | Lucide React | **Consistency + Clarity** - Unified stroke width, clean aesthetic |
 
 </div>
@@ -183,7 +186,7 @@ graph TB
         Router[Rails Router]
         Controller[Inertia Controllers]
         Model[ActiveRecord Models]
-        DB[(SQLite Database)]
+        DB[(PostgreSQL Database)]
     end
     
     Click -->|Inertia Visit| Router
@@ -211,47 +214,60 @@ graph TB
 
 - **Ruby** 3.2+ (`rbenv` or `rvm` recommended)
 - **Node.js** 20+ (`nvm` recommended)
-- **SQLite3** (built into macOS, Linux: `sudo apt-get install sqlite3`)
-- **Bun** (optional, faster than Yarn for JavaScript package management)
+- **Docker** (for PostgreSQL database)
+- **foreman** gem (`gem install foreman`)
 
-### Installation (3 Minutes)
+### Installation (5 Minutes)
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/invoiceforge.git
+git clone https://github.com/nordeim/invoiceforge.git
 cd invoiceforge
 
 # 2. Install Ruby dependencies
 bundle install
 
 # 3. Install JavaScript dependencies
-npm install  # or bun install
+npm install
 
-# 4. Set up the database
-bin/rails db:create db:migrate
+# 4. Copy environment file
+cp .env.docker .env
 
-# 5. Seed with sample data (optional)
-bin/rails db:seed
+# 5. Start PostgreSQL (Docker)
+bin/docker-dev start
 
-# 6. Start the development server
-bin/dev
+# 6. Set up the database
+source .env && bin/rails db:create db:migrate db:seed
+
+# 7. Start both Rails and Vite servers
+source .env && foreman start -f Procfile.dev
 ```
 
-**Visit `http://localhost:3000`** to see the dashboard with mock data.
+**Visit `http://localhost:3000`** and login with:
+- **Email:** `admin@invoiceforge.app`
+- **Password:** `password123`
+
+> **Note:** React Hot Module Replacement (HMR) is disabled due to a Vite/Rails proxy compatibility issue. Use full page refresh after React component changes.
 
 ### Development Commands Cheat Sheet
 
 ```bash
-# Full app (Rails + Vite, recommended)
-bin/dev
+# Start PostgreSQL (first terminal or background)
+bin/docker-dev start
 
-# Rails server only
-bin/rails server
+# Full app - Rails + Vite (recommended)
+source .env && foreman start -f Procfile.dev
 
-# Vite frontend only
-npm run dev         # or bun run dev
+# Stop PostgreSQL
+bin/docker-dev stop
 
-# Tests
+# Database console
+bin/docker-dev psql
+
+# Rails console
+source .env && bin/rails console
+
+# Run tests
 bin/rails test
 npm test
 
@@ -493,13 +509,15 @@ InvoiceForge uses a **strict 4px base unit** (Tailwind's default):
 - [x] **Day 7**: Additional public invoice components (BilledTo, Notes, NotFound)
 - [x] **Day 8**: Accessibility audit (SkipLink, LiveRegion, WCAG AA compliance)
 
-### Phase 2: Backend Integration
-**Planned**: Q1 2025
-- [ ] **Database Persistence**: Replace mock data with PostgreSQL
-- [ ] **User Authentication**: Devise or custom auth with session management
-- [ ] **File Attachments**: Active Storage for invoice documents
-- [ ] **Email Integration**: Send invoices via Action Mailer
-- [ ] **PDF Generation**: Prawn or Grover for professional exports
+### Phase 2: Backend Integration *(In Progress ⚙️)*
+**Status**: Active Development
+- [x] **Database Persistence**: PostgreSQL v16 with Docker
+- [x] **User Authentication**: Devise with session management
+- [x] **ActiveRecord Models**: Client, Invoice, LineItem, User
+- [x] **Real Data Integration**: Dashboard, Clients, Invoices using database
+- [x] **Email Templates**: InvoiceMailer with HTML/text templates
+- [ ] **PDF Generation**: Prawn or wicked_pdf for professional exports
+- [ ] **Stripe Integration**: Real payment processing
 
 ### Phase 3: Payment Processing
 **Planned**: Q2 2025
@@ -583,8 +601,8 @@ graph LR
 
 </div>
 
-**Latest Milestone**: Phase 1 Complete - Full frontend prototype with all views  
-**Next Milestone**: Phase 2 - Backend integration with database persistence
+**Latest Milestone**: Phase 2 In Progress - Backend integration with PostgreSQL, Devise auth, and real data  
+**Next Milestone**: PDF generation and Stripe payment integration
 
 ## 📚 Additional Resources
 

@@ -8,11 +8,20 @@
 
 ## Executive Summary
 
-InvoiceForge is a **meticulously designed, single-user invoicing SPA** built on Rails 8 + Inertia.js + React 18 + TailwindCSS v4. The project features a distinctive **"Neo-Editorial Precision"** design language that merges Swiss typography principles with bold editorial treatments.
+InvoiceForge is a **meticulously designed, single-user invoicing SPA** built on Rails 8.1.1 + Inertia.js + React 18 + TailwindCSS v4 + PostgreSQL v16. The project features a distinctive **"Neo-Editorial Precision"** design language that merges Swiss typography principles with bold editorial treatments.
 
-**Current State:** Phase 1 (Frontend Design & Prototyping) is **COMPLETE** with a pixel-perfect, static frontend using mock data.
+**Current State:** 
+- Phase 1 (Frontend Design & Prototyping): **COMPLETE** ✅
+- Phase 2 (Backend Integration): **IN PROGRESS** ⚙️
 
-**Next Phase:** Phase 2 will integrate real backend persistence, authentication, payments, PDF generation, and email notifications.
+**Completed in Phase 2:**
+- PostgreSQL v16 database with Docker
+- Devise authentication (User model)
+- ActiveRecord models (Client, Invoice, LineItem)
+- Real data integration (Dashboard, Clients, Invoices)
+- Email templates (InvoiceMailer)
+
+**Remaining in Phase 2:** PDF Generation, Stripe Integration
 
 ---
 
@@ -180,13 +189,21 @@ Every design decision traces back to this principle:
 ┌─────────────────────────────────────────────────────────────────┐
 │                      TECHNOLOGY STACK                           │
 ├─────────────────────────────────────────────────────────────────┤
-│  BACKEND          │  Ruby on Rails 8.x                          │
+│  BACKEND          │  Ruby on Rails 8.1.1                        │
+│  DATABASE         │  PostgreSQL 16 (Docker)                     │
+│  AUTHENTICATION   │  Devise 4.9                                 │
 │  FRONTEND ADAPTER │  Inertia.js (Rails Adapter)                 │
 │  VIEW LAYER       │  React 18+                                  │
 │  STYLING          │  TailwindCSS v4                             │
+│  BUILD TOOL       │  Vite + esbuild (see note below)            │
 │  COMPONENTS       │  ShadCN UI (Radix Primitives)               │
 │  ICONS            │  Lucide React                               │
 └─────────────────────────────────────────────────────────────────┘
+```
+
+> **⚠️ Vite Configuration Note:**  
+> The React plugin (`@vitejs/plugin-react-swc`) was removed due to a "preamble detection" error when Vite is proxied through Rails on port 3000 while running on port 3036.  
+> JSX transformation is handled by **esbuild** instead. This disables React Hot Module Replacement (HMR) — full page refresh is required for component changes.
 ```
 
 ### 3.2 Directory Structure
@@ -194,10 +211,21 @@ Every design decision traces back to this principle:
 ```
 app/
 ├── controllers/
-│   ├── dashboard_controller.rb      # Stub - renders Inertia page
-│   ├── clients_controller.rb        # Stub - renders Inertia page
-│   ├── invoices_controller.rb       # Pre-built CRUD (awaiting models)
+│   ├── application_controller.rb    # Auth + Inertia sharing
+│   ├── dashboard_controller.rb      # Real metrics from DB
+│   ├── clients_controller.rb        # Full CRUD with real data
+│   ├── invoices_controller.rb       # CRUD + status actions
 │   └── public_invoices_controller.rb # Token-based public access
+│
+├── models/
+│   ├── client.rb                    # Validations, computed fields
+│   ├── invoice.rb                   # Status workflow, totals
+│   ├── line_item.rb                 # Item types, positioning
+│   └── user.rb                      # Devise authentication
+│
+├── mailers/
+│   ├── application_mailer.rb
+│   └── invoice_mailer.rb            # Send invoice, reminders
 │
 ├── frontend/
 │   ├── components/
@@ -216,7 +244,6 @@ app/
 │   ├── lib/
 │   │   ├── utils.ts            # cn(), formatCurrency(), formatDate()
 │   │   ├── types.ts            # TypeScript interfaces
-│   │   ├── mock-data.ts        # Phase 1 stub data
 │   │   ├── invoice-utils.ts    # calculateTotals, status helpers
 │   │   └── accessibility-utils.ts
 │   │
@@ -228,31 +255,60 @@ app/
 │   │   ├── Invoices/Edit.tsx
 │   │   └── PublicInvoice/Show.tsx
 │   │
-│   ├── hooks/
-│   │   └── useTheme.ts         # Dark mode management
-│   │
 │   └── entrypoints/
-│       └── inertia.tsx         # Inertia app initialization
+│       ├── inertia.tsx         # Inertia app initialization
+│       └── application.css     # Tailwind v4 + @theme config
 │
-└── assets/stylesheets/
-    └── application.css         # Tailwind v4 + @theme config
+├── views/
+│   └── layouts/
+│       ├── application.html.erb  # Inertia layout with Vite assets
+│       └── devise.html.erb       # Auth pages layout
+│
+config/
+├── routes.rb                     # Devise + authenticated routes
+├── vite.json                     # Vite Ruby configuration
+└── initializers/
+    ├── devise.rb                 # Devise configuration
+    └── inertia_rails.rb          # Inertia configuration
+
+docker/
+└── init-db/
+    └── 01-create-test-db.sh      # Test database setup
+
+bin/
+├── docker-dev                    # PostgreSQL Docker helper
+└── vite                          # Vite CLI wrapper
+
+Procfile.dev                      # foreman process file
+docker-compose.yml                # PostgreSQL container
+.env.docker                       # Environment template
 ```
 
 ### 3.3 Current Routing Configuration
 
 ```ruby
 Rails.application.routes.draw do
+  # Devise authentication
+  devise_for :users, path: 'users', path_names: {
+    sign_in: 'sign_in', sign_out: 'sign_out'
+  }
+
+  # Authenticated routes
   root "dashboard#index"
   get "dashboard", to: "dashboard#index"
+  
   resources :clients
   resources :invoices do
     member do
+      get :download_pdf
       post :duplicate
       put :mark_paid
       put :mark_sent
       put :cancel
     end
   end
+  
+  # Public invoice (no auth required)
   get "i/:token", to: "public_invoices#show", as: :public_invoice
 end
 ```
@@ -273,56 +329,51 @@ end
 | **Public Invoice** | ✅ Complete | Show.tsx, PaymentModal mock, print optimization |
 | **Accessibility** | ✅ Complete | SkipLink, VisuallyHidden, LiveRegion, SR-only support |
 
-### 4.2 Backend Gap Analysis
+### 4.2 Backend Implementation Status
 
-| Component | Current State | Phase 2 Requirement |
-|-----------|---------------|---------------------|
-| **Gemfile** | Only `inertia_rails` gem | Full Rails 8 with ActiveRecord, SQLite/PostgreSQL |
-| **Models** | ❌ None exist | Client, Invoice, LineItem models with validations |
-| **Migrations** | ❌ None exist | Database schema matching TypeScript types |
-| **Controllers** | InvoicesController pre-written, others are stubs | All controllers with real data queries |
-| **Authentication** | ❌ None | Session-based auth (Devise or custom) |
-| **Payments** | Mock PaymentModal | Stripe Elements integration |
-| **PDF Generation** | ❌ None | Invoice PDF export capability |
-| **Email** | ❌ None | Action Mailer for invoice sending |
+| Component | Status | Implementation |
+|-----------|--------|----------------|
+| **Gemfile** | ✅ Complete | Rails 8.1.1, PostgreSQL, Devise, Prawn (PDF), RSpec |
+| **Models** | ✅ Complete | Client, Invoice, LineItem, User with validations |
+| **Migrations** | ✅ Complete | Full schema matching TypeScript types |
+| **Controllers** | ⚙️ Partial | Dashboard, Clients complete; Invoices needs remaining actions |
+| **Authentication** | ✅ Complete | Devise with session-based auth |
+| **Payments** | ❌ Pending | Mock PaymentModal exists, Stripe integration needed |
+| **PDF Generation** | ❌ Pending | Prawn gem installed, implementation pending |
+| **Email** | ⚙️ Partial | InvoiceMailer templates created, not wired to actions |
 
 ---
 
-## 5. Phase 2 Roadmap (Next Steps)
+## 5. Phase 2 Remaining Work
 
 ### 5.1 Priority Order
 
-1. **Backend Foundation** (Critical Path)
-   - Full Rails application structure
-   - Database models and migrations
-   - Replace mock data with real persistence
+1. **PDF Generation** (High Priority)
+   - Implement Prawn-based invoice PDF export
+   - Add download button to invoice views
 
-2. **User Authentication** (Security)
-   - Session-based auth with Devise or custom
-   - Protect admin routes
-
-3. **Real Payment Integration**
-   - Stripe Elements for payment processing
+2. **Stripe Integration** (High Priority)
+   - Replace mock PaymentModal with Stripe Elements
    - Webhook handling for payment status
 
-4. **PDF Generation**
-   - Invoice PDF export using Prawn or wicked_pdf
+3. **Complete InvoicesController** (Medium Priority)
+   - Wire up remaining CRUD actions
+   - Add mark_paid, mark_sent, cancel actions
 
-5. **Email Notifications**
-   - Action Mailer setup
-   - Send invoices via email
+4. **Email Wiring** (Medium Priority)
+   - Connect InvoiceMailer to invoice actions
+   - Send on invoice creation/update
 
-### 5.2 Risk Assessment
+### 5.2 Known Limitations
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Database schema mismatch with TypeScript types | Medium | High | Validate interfaces during model creation |
-| InvoicesController code incompatible with actual models | Medium | Medium | Review and update controller logic during migration |
-| Font loading delay | Medium | Low | Already handled with `font-display: swap` |
-| Complex LineItemEditor state bugs | High | Medium | Add comprehensive unit tests for calculations |
+| Limitation | Impact | Workaround |
+|------------|--------|------------|
+| React HMR disabled | Dev experience | Full page refresh after React changes |
+| Vite React plugin removed | No Fast Refresh | Using esbuild JSX transformation |
+| InvoicesController incomplete | Some actions mock | Finish implementation in Phase 2 |
 
 ---
 
-## 6. Ready for Phase 2 Implementation
+## 6. Conclusion
 
-This analysis confirms InvoiceForge Phase 1 is **production-ready for UI/UX** and Phase 2 can proceed with backend integration. The pre-written `InvoicesController` provides a significant head start, but models, migrations, and database configuration remain to be implemented.
+Phase 2 backend integration is **substantially complete**. The application now runs with real PostgreSQL data, Devise authentication, and proper ActiveRecord models. The remaining work (PDF, Stripe, email wiring) is additive rather than foundational.

@@ -1,23 +1,36 @@
-# AGENT BRIEFING: InvoiceForge (Phase 1)
+# AGENT BRIEFING: InvoiceForge (Phase 2)
 
-**Date:** 2025-12-08
-**Status:** Phase 1 (Frontend Design & Prototyping) - Days 1-8 Complete ✅
-**Stack:** Rails 8 + Inertia.js + React 18 + TailwindCSS v4
+**Date:** 2025-12-15
+**Status:** Phase 2 (Backend Integration) - In Progress ⚙️
+**Stack:** Rails 8.1.1 + Inertia.js + React 18 + TailwindCSS v4 + PostgreSQL v16
 
 ## 1. Executive Summary
-InvoiceForge is a single-user invoicing application prioritizing "Neo-Editorial Precision". The project has completed **Phase 1**, achieving a pixel-perfect, static frontend with mock data.
+
+InvoiceForge is a single-user invoicing application prioritizing "Neo-Editorial Precision". The project has completed **Phase 1** (Frontend) and is actively working on **Phase 2** (Backend Integration).
 
 **Current State**:
-- **Shell/Layouts**: ✅ Complete (Sidebar, MobileNav, ThemeToggle, PublicLayout).
-- **Dashboard**: ✅ Complete (Metrics, ActivityFeed, RecentInvoices).
-- **Clients**: ✅ Complete (Index, Table/Cards, Sheet Form, Avatar).
-- **Invoices List**: ✅ Complete (Index, FilterTabs, StatusBadge, RowActions).
-- **Invoice Editor**: ✅ Complete (New.tsx, Edit.tsx, LineItemsEditor, ClientSelector, DatePicker, InvoiceSummary).
-- **Public Invoice**: ✅ Complete (Show.tsx, Header, LineItems, Totals, BilledTo, Notes, PaymentModal).
-- **Accessibility**: ✅ Complete (SkipLink, VisuallyHidden, LiveRegion, StatusBadge with sr-only).
-- **Backend Controllers**: Full CRUD routes for invoices, public invoice view.
+- **Phase 1 (Frontend)**: ✅ Complete
+  - Shell/Layouts, Dashboard, Clients, Invoices List, Invoice Editor, Public Invoice, Accessibility
+- **Phase 2 (Backend)**: ⚙️ In Progress
+  - Database (PostgreSQL v16 with Docker): ✅ Complete
+  - Authentication (Devise): ✅ Complete
+  - Models (Client, Invoice, LineItem, User): ✅ Complete
+  - Controllers (Dashboard, Clients with real data): ✅ Complete
+  - Email Setup (InvoiceMailer templates): ✅ Complete
+  - PDF Generation: ❌ Pending
+  - Stripe Integration: ❌ Pending
 
 ## 2. Technical Architecture & Standards
+
+### Database
+- **PostgreSQL v16** running in Docker container
+- Managed via `docker-compose.yml` and `bin/docker-dev` helper script
+- Environment variables in `.env` (copied from `.env.docker`)
+
+### Authentication
+- **Devise** gem with custom User model
+- Session-based authentication
+- All routes protected by `authenticate_user!` except public invoice
 
 ### Design System ("Neo-Editorial Precision")
 **Strict Adherence Required**:
@@ -28,51 +41,82 @@ InvoiceForge is a single-user invoicing application prioritizing "Neo-Editorial 
 
 ### Code Patterns
 *   **Frontend**: Inertia.js pages in `app/frontend/pages`. Components in `app/frontend/components`.
-*   **Styling**: Tailwind v4. Configuration is in `app/assets/stylesheets/application.css` via `@theme`.
-*   **Data**: Currently uses `app/frontend/lib/mock-data.ts`. All frontend pages fall back to this if props are missing.
+*   **Styling**: Tailwind v4. Configuration is in `app/frontend/entrypoints/application.css` via `@theme`.
+*   **Data**: Real data from PostgreSQL. Mock data fallback removed.
 *   **Icons**: `lucide-react`.
 *   **Accessibility**: Use components from `shared/` for skip links, announcements, and sr-only text.
+
+### Vite Configuration
+> **⚠️ Known Limitation**: React Hot Module Replacement (HMR) is disabled.  
+> The React plugin was removed due to a "preamble detection" issue when Vite is proxied through Rails.  
+> Using `esbuild` JSX transformation instead. Full page refresh required for React changes.
 
 ## 3. Detailed Component Status
 
 | Feature | Component/File | Status | Notes |
 | :--- | :--- | :--- | :--- |
+| **Backend** | PostgreSQL + Docker | ✅ Done | `docker-compose.yml`, `bin/docker-dev` |
+| | Devise Auth | ✅ Done | User model with sessions |
+| | Client Model | ✅ Done | With validations & computed fields |
+| | Invoice Model | ✅ Done | Status workflow, totals calculation |
+| | LineItem Model | ✅ Done | Item types, position ordering |
 | **Shell** | `AppLayout` | ✅ Done | Correct "well" background structure. |
 | | `Sidebar` / `MobileNav` | ✅ Done | Responsive logic works. |
 | | `ThemeToggle` | ✅ Done | Light/dark with persistence. |
 | | `PublicLayout` | ✅ Done | Minimal layout for public pages. |
-| **Dashboard** | `MetricCard`, `ActivityFeed`, `RecentInvoices` | ✅ Done | |
-| | `Dashboard.tsx` | ✅ Done | Fully implemented. |
-| **Clients** | `ClientTable`, `ClientCard`, `ClientAvatar` | ✅ Done | Responsive switch. |
+| **Dashboard** | `MetricCard`, `ActivityFeed` | ✅ Done | Real database metrics |
+| | `Dashboard.tsx` | ✅ Done | DashboardController with real data |
+| **Clients** | `ClientTable`, `ClientCard` | ✅ Done | Real client data from DB |
 | | `ClientForm` | ✅ Done | Sheet-based form. |
-| **Invoices** | `Invoices/Index.tsx` | ✅ Done | Filters, Table/Cards. |
+| **Invoices** | `Invoices/Index.tsx` | ✅ Done | Real invoices from DB |
 | | `Invoices/New.tsx` | ✅ Done | Full invoice creation form. |
 | | `Invoices/Edit.tsx` | ✅ Done | Status-aware editing. |
 | | `LineItemsEditor` | ✅ Done | Items, sections, discounts. |
-| | `ClientSelector`, `DatePicker` | ✅ Done | |
-| | `InvoiceSummary` | ✅ Done | Real-time totals. |
-| **Public Invoice** | `PublicInvoice/Show.tsx` | ✅ Done | Client-facing view. |
-| | `PublicInvoiceHeader`, `BilledTo`, `LineItems`, `Totals`, `Notes` | ✅ Done | Modular components. |
-| | `PaymentModal` | ✅ Done | Mock Stripe payment. |
-| | `Errors/NotFound.tsx` | ✅ Done | 404 page. |
-| **Accessibility** | `SkipLink`, `VisuallyHidden`, `LiveRegion` | ✅ Done | WCAG AA support. |
-| **Dev Tools** | `AccessibilityChecklist`, `FontLoadingStatus` | ✅ Done | Development debugging. |
+| **Public Invoice** | `PublicInvoice/Show.tsx` | ✅ Done | Token-based lookup. |
+| | `PaymentModal` | ✅ Done | Mock Stripe (real integration pending) |
+| **Email** | `InvoiceMailer` | ✅ Done | Basic templates created |
 
 ## 4. Key Files Reference
 
-*   **Design Tokens**: `app/assets/stylesheets/application.css`
-*   **Mock Data**: `app/frontend/lib/mock-data.ts`
+### Backend
+*   **Models**: `app/models/client.rb`, `app/models/invoice.rb`, `app/models/line_item.rb`, `app/models/user.rb`
+*   **Migrations**: `db/migrate/` (clients, invoices, line_items, devise_users)
+*   **Controllers**: `app/controllers/dashboard_controller.rb`, `app/controllers/clients_controller.rb`
+*   **Seeds**: `db/seeds.rb` (sample data)
+
+### Frontend
+*   **Design Tokens**: `app/frontend/entrypoints/application.css`
 *   **Type Definitions**: `app/frontend/lib/types.ts`
 *   **Invoice Utilities**: `app/frontend/lib/invoice-utils.ts`
 *   **Accessibility Utilities**: `app/frontend/lib/accessibility-utils.ts`
-*   **Controllers**: `app/controllers/invoices_controller.rb`, `app/controllers/public_invoices_controller.rb`
-*   **Routes**: `config/routes.rb` (full CRUD + custom actions)
 
-## 5. Next Steps (Phase 2)
+### Configuration
+*   **Docker**: `docker-compose.yml`, `Dockerfile`, `.dockerignore`
+*   **Environment**: `.env.docker` (template), `.env` (active)
+*   **Vite**: `vite.config.ts`, `config/vite.json`
+*   **Routes**: `config/routes.rb`
 
-Phase 1 is complete. Phase 2 will focus on:
-1. **Backend Integration**: Replace mock data with PostgreSQL/SQLite.
-2. **User Authentication**: Session-based auth with Devise or custom.
-3. **Real Payment Integration**: Stripe Elements.
-4. **PDF Generation**: Invoice exports.
-5. **Email Notifications**: Send invoices via Action Mailer.
+## 5. Development Setup
+
+```bash
+# 1. Start PostgreSQL (Docker)
+bin/docker-dev start
+
+# 2. Setup database (first time)
+source .env && bin/rails db:create db:migrate db:seed
+
+# 3. Start development servers (Rails + Vite)
+source .env && foreman start -f Procfile.dev
+
+# 4. Open browser
+open http://localhost:3000
+
+# Login: admin@invoiceforge.app / password123
+```
+
+## 6. Next Steps (Phase 2 Remaining)
+
+1. **PDF Generation**: Invoice PDF export using Prawn
+2. **Real Payment Integration**: Stripe Elements
+3. **Complete InvoicesController**: Remaining CRUD actions
+4. **Email Sending**: Wire up InvoiceMailer to actions
