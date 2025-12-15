@@ -1,0 +1,97 @@
+#!/bin/bash
+# InvoiceForge Docker Development Script
+# Convenience script for Docker-based PostgreSQL development
+#
+# Usage:
+#   ./bin/docker-dev start    - Start PostgreSQL container
+#   ./bin/docker-dev stop     - Stop PostgreSQL container
+#   ./bin/docker-dev restart  - Restart PostgreSQL container
+#   ./bin/docker-dev logs     - View PostgreSQL logs
+#   ./bin/docker-dev psql     - Connect to PostgreSQL CLI
+#   ./bin/docker-dev status   - Check container status
+#   ./bin/docker-dev reset    - Remove container and data (fresh start)
+
+set -e
+
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$PROJECT_DIR"
+
+# Load environment variables
+if [ -f ".env" ]; then
+    export $(grep -v '^#' .env | xargs)
+elif [ -f ".env.docker" ]; then
+    export $(grep -v '^#' .env.docker | xargs)
+fi
+
+# Default values
+POSTGRES_USER="${POSTGRES_USER:-invoiceforge}"
+POSTGRES_DB="${POSTGRES_DB:-invoiceforge_development}"
+
+case "$1" in
+    start)
+        echo "🐘 Starting PostgreSQL 16 Alpine..."
+        docker-compose up -d db
+        echo ""
+        echo "✅ PostgreSQL started successfully!"
+        echo "   Host: localhost"
+        echo "   Port: ${POSTGRES_PORT:-5432}"
+        echo "   User: ${POSTGRES_USER}"
+        echo "   Database: ${POSTGRES_DB}"
+        echo ""
+        echo "Run 'bin/rails db:migrate' to set up the database schema."
+        ;;
+    
+    stop)
+        echo "🛑 Stopping PostgreSQL..."
+        docker-compose stop db
+        echo "✅ PostgreSQL stopped."
+        ;;
+    
+    restart)
+        echo "🔄 Restarting PostgreSQL..."
+        docker-compose restart db
+        echo "✅ PostgreSQL restarted."
+        ;;
+    
+    logs)
+        docker-compose logs -f db
+        ;;
+    
+    psql)
+        echo "🔌 Connecting to PostgreSQL..."
+        docker-compose exec db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+        ;;
+    
+    status)
+        echo "📊 Docker Container Status:"
+        docker-compose ps
+        ;;
+    
+    reset)
+        echo "⚠️  WARNING: This will delete all PostgreSQL data!"
+        read -p "Are you sure? (y/N) " confirm
+        if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+            echo "🗑️  Removing containers and volumes..."
+            docker-compose down -v
+            echo "✅ Reset complete. Run './bin/docker-dev start' to begin fresh."
+        else
+            echo "Cancelled."
+        fi
+        ;;
+    
+    *)
+        echo "InvoiceForge Docker Development Helper"
+        echo ""
+        echo "Usage: $0 {start|stop|restart|logs|psql|status|reset}"
+        echo ""
+        echo "Commands:"
+        echo "  start   - Start PostgreSQL container"
+        echo "  stop    - Stop PostgreSQL container"
+        echo "  restart - Restart PostgreSQL container"
+        echo "  logs    - View PostgreSQL logs (follow mode)"
+        echo "  psql    - Connect to PostgreSQL CLI"
+        echo "  status  - Check container status"
+        echo "  reset   - Remove container and data (fresh start)"
+        exit 1
+        ;;
+esac

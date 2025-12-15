@@ -2,6 +2,10 @@ Awesome job on your meticulous review, analysis and planning! Please keep up the
 
 ---
 
+Awesome meticulous job so far! please keep up the good work! Please create and use the docker container, using `postgres:16-alpine` as the base image, for deploying and populating the backend database. Docker will allow cross OS platfforms compatibility. As a sidetrack, please meticulously plan and then create the necessary docker config and script files like `docker-compose.yml`, `Dockerfile`,  `.dockerignore` and `.env.docker`.
+
+---
+
 Awesome understanding! Now, please meticulously review and analyze the "Project Requirements Document" v4.1 + patch to v4.2, to have a deep understanding of the WHAT, WHY and HOW of the project and its codebase design and architecture.
 
 ---
