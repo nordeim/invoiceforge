@@ -83,3 +83,26 @@ export function InvoiceSummary({
     </div>
   )
 }
+
+/**
+ * InvoiceSummaryCompact — Compact version for table rows
+ */
+export function InvoiceSummaryCompact({
+  subtotal,
+  totalDiscount,
+  total,
+  className,
+}: InvoiceSummaryProps) {
+  return (
+    <div className={cn("text-right", className)}>
+      <div className="text-sm text-slate-500">
+        Subtotal: {formatCurrency(subtotal)}
+        {totalDiscount > 0 && ` • Discount: -${formatCurrency(totalDiscount)}`}
+      </div>
+      <div className="font-mono font-semibold text-slate-900 dark:text-slate-50">
+        {formatCurrency(total)}
+      </div>
+    </div>
+  )
+}
+

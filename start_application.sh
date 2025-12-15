@@ -26,3 +26,16 @@ Service	URLs:
 # Login Credentials
 Email: admin@invoiceforge.app
 Password: password123
+
+---
+
+# Stop foreman first (Ctrl+C)
+
+# Clear Vite cache
+rm -rf node_modules/.vite
+
+# Clear Rails tmp cache
+rm -rf tmp/cache
+
+# Restart
+source .env && foreman start -f Procfile.dev

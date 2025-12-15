@@ -1,4 +1,5 @@
 // app/frontend/components/layout/Logo.tsx
+import * as React from "react"
 import { cn } from "@/lib/utils"
 
 interface LogoProps {

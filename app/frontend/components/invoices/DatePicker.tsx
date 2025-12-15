@@ -1,6 +1,6 @@
 // app/frontend/components/invoices/DatePicker.tsx
 import * as React from "react"
-import { format } from "date-fns"
+import { format, addDays } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -17,6 +17,27 @@ interface DatePickerProps {
   placeholder?: string
   disabled?: boolean
   className?: string
+}
+
+/**
+ * Payment term options for invoice due dates
+ */
+export const paymentTermOptions = [
+  { value: 0, label: "Due on receipt" },
+  { value: 7, label: "Net 7" },
+  { value: 14, label: "Net 14" },
+  { value: 15, label: "Net 15" },
+  { value: 30, label: "Net 30" },
+  { value: 45, label: "Net 45" },
+  { value: 60, label: "Net 60" },
+  { value: 90, label: "Net 90" },
+] as const
+
+/**
+ * Calculate due date from issue date and payment terms
+ */
+export function calculateDueDate(issueDate: Date, paymentTermDays: number): Date {
+  return addDays(issueDate, paymentTermDays)
 }
 
 /**
@@ -68,3 +89,4 @@ export function DatePicker({
     </Popover>
   )
 }
+
