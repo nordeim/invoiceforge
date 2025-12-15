@@ -4,14 +4,19 @@ import { router } from "@inertiajs/react"
 import { AppLayout } from "@/layouts/AppLayout"
 import { PageHeader } from "@/components/shared/PageHeader"
 import { Button } from "@/components/ui/button"
-import { 
-  InvoiceFilterTabs, 
+import {
+  InvoiceFilterTabs,
   InvoiceList,
-  type FilterValue 
+  type FilterValue
 } from "@/components/invoices"
 import { mockInvoices } from "@/lib/mock-data"
 import { Plus } from "lucide-react"
 import type { Invoice } from "@/lib/types"
+
+interface InvoicesIndexProps {
+  /** Invoices from backend (optional - falls back to mock) */
+  invoices?: Invoice[]
+}
 
 /**
  * Invoices Page — Command center for all invoices
@@ -22,22 +27,25 @@ import type { Invoice } from "@/lib/types"
  * - Responsive table (desktop) / cards (mobile)
  * - Contextual row actions
  */
-export default function InvoicesIndex() {
+export default function InvoicesIndex({ invoices: propsInvoices }: InvoicesIndexProps) {
+  // Use props if provided, otherwise fall back to mock data
+  const allInvoices = propsInvoices || mockInvoices
+
   // Filter state
   const [activeFilter, setActiveFilter] = useState<FilterValue>('all')
 
   // Filter invoices based on active filter
   const filteredInvoices = useMemo(() => {
     if (activeFilter === 'all') {
-      return mockInvoices
+      return allInvoices
     }
-    return mockInvoices.filter(invoice => invoice.status === activeFilter)
-  }, [activeFilter])
+    return allInvoices.filter(invoice => invoice.status === activeFilter)
+  }, [activeFilter, allInvoices])
 
   // Sort by most recent first
   const sortedInvoices = useMemo(() => {
     return [...filteredInvoices].sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      (a, b) => new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime()
     )
   }, [filteredInvoices])
 
@@ -104,7 +112,7 @@ export default function InvoicesIndex() {
       {/* Page Header */}
       <PageHeader
         title="Invoices"
-        subtitle={`${mockInvoices.length} total invoice${mockInvoices.length !== 1 ? 's' : ''}`}
+        subtitle={`${allInvoices.length} total invoice${allInvoices.length !== 1 ? 's' : ''}`}
         actions={
           <Button onClick={handleNewInvoice}>
             <Plus className="h-4 w-4 mr-2" />
@@ -116,7 +124,7 @@ export default function InvoicesIndex() {
       {/* Filter Tabs */}
       <div className="mb-6">
         <InvoiceFilterTabs
-          invoices={mockInvoices}
+          invoices={allInvoices}
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
         />
@@ -137,7 +145,7 @@ export default function InvoicesIndex() {
       {/* Filter Result Count */}
       {activeFilter !== 'all' && filteredInvoices.length > 0 && (
         <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
-          Showing {filteredInvoices.length} of {mockInvoices.length} invoices
+          Showing {filteredInvoices.length} of {allInvoices.length} invoices
         </p>
       )}
     </AppLayout>

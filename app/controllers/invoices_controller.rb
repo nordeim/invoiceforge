@@ -191,6 +191,14 @@ class InvoicesController < ApplicationController
       id: invoice.id.to_s,
       invoiceNumber: invoice.invoice_number,
       clientId: invoice.client_id.to_s,
+      client: invoice.client ? {
+        id: invoice.client.id.to_s,
+        name: invoice.client.name,
+        email: invoice.client.email,
+        company: invoice.client.company,
+        address: invoice.client.address,
+        phone: invoice.client.phone
+      } : nil,
       clientName: invoice.client&.name || 'Unknown Client',
       clientCompany: invoice.client&.company,
       clientEmail: invoice.client&.email,

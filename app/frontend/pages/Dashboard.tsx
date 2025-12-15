@@ -60,7 +60,7 @@ export default function Dashboard({
 
   // Sort invoices by date (most recent first) for display
   const recentInvoices = [...allInvoices].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    (a, b) => new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime()
   )
 
   // Count invoices by status for subtext

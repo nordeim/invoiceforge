@@ -53,12 +53,25 @@ class DashboardController < ApplicationController
       id: invoice.id.to_s,
       invoiceNumber: invoice.invoice_number,
       clientId: invoice.client_id.to_s,
-      clientName: invoice.client&.name || 'Unknown Client',
+      client: invoice.client ? {
+        id: invoice.client.id.to_s,
+        name: invoice.client.name,
+        email: invoice.client.email,
+        company: invoice.client.company,
+        address: invoice.client.address,
+        phone: invoice.client.phone
+      } : nil,
       status: invoice.calculated_status,
       issueDate: invoice.issue_date.iso8601,
       dueDate: invoice.due_date.iso8601,
+      notes: invoice.notes,
       total: invoice.total.to_f,
-      token: invoice.token
+      subtotal: invoice.subtotal.to_f,
+      totalDiscount: invoice.total_discount.to_f,
+      token: invoice.token,
+      lineItems: [],  # Not needed for dashboard display
+      createdAt: invoice.created_at.iso8601,
+      updatedAt: invoice.updated_at.iso8601
     }
   end
 
