@@ -1,17 +1,21 @@
 # PostgreSQL v16 Configuration for InvoiceForge
 # All environments use PostgreSQL for consistency
+#
+# For Docker: Uses environment variables from .env
+# For Local: Update PGHOST, PGUSER, PGPASSWORD in your shell or .env file
 
 default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV.fetch("PGHOST") { "localhost" } %>
-  username: <%= ENV.fetch("PGUSER") { "postgres" } %>
-  password: <%= ENV.fetch("PGPASSWORD") { "" } %>
+  host: <%= ENV.fetch("POSTGRES_HOST") { "localhost" } %>
+  port: <%= ENV.fetch("POSTGRES_PORT") { 5432 } %>
+  username: <%= ENV.fetch("POSTGRES_USER") { "invoiceforge" } %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD") { "invoiceforge_dev_password" } %>
 
 development:
   <<: *default
-  database: invoiceforge_development
+  database: <%= ENV.fetch("POSTGRES_DB") { "invoiceforge_development" } %>
 
 test:
   <<: *default
