@@ -162,8 +162,8 @@ class InvoicePdfGenerator
       end
     end
 
-    # Render table
-    pdf.table(table_data, width: pdf.bounds.width) do |table|
+    # Render table (no explicit width - column widths control sizing)
+    pdf.table(table_data) do |table|
       table.cells.padding = [8, 10, 8, 10]
       table.cells.borders = [:bottom]
       table.cells.border_color = 'E2E8F0'
@@ -173,15 +173,16 @@ class InvoicePdfGenerator
       table.row(0).background_color = COLORS[:light]
       table.row(0).text_color = COLORS[:primary]
       
-      # Column widths
-      table.column(0).width = 250
-      table.column(1).width = 50
+      # Column widths (must sum to <= 515 for A4 with 40pt margins)
+      # Total: 235 + 45 + 55 + 90 + 90 = 515
+      table.column(0).width = 235
+      table.column(1).width = 45
       table.column(1).align = :center
-      table.column(2).width = 60
+      table.column(2).width = 55
       table.column(2).align = :center
-      table.column(3).width = 80
+      table.column(3).width = 90
       table.column(3).align = :right
-      table.column(4).width = 80
+      table.column(4).width = 90
       table.column(4).align = :right
     end
 

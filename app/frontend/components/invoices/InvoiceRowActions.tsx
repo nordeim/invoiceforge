@@ -16,6 +16,7 @@ import {
   Trash2,
   ExternalLink,
   Copy,
+  Download,
 } from "lucide-react"
 import type { Invoice } from "@/lib/types"
 
@@ -48,7 +49,7 @@ export function InvoiceRowActions({
   onCopyLink,
 }: InvoiceRowActionsProps) {
   const { status } = invoice
-  
+
   const isDraft = status === 'draft'
   const canMarkPaid = status === 'pending' || status === 'overdue'
   const hasPublicLink = status !== 'draft'
@@ -87,6 +88,14 @@ export function InvoiceRowActions({
             Copy Link
           </DropdownMenuItem>
         )}
+
+        {/* Download PDF — Available for all invoices */}
+        <DropdownMenuItem asChild>
+          <a href={`/invoices/${invoice.id}/download_pdf`} download>
+            <Download className="mr-2 h-4 w-4" />
+            Download PDF
+          </a>
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 

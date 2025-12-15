@@ -31,6 +31,7 @@ import {
   Loader2,
   AlertTriangle,
   Eye,
+  Download,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { calculateTotals } from "@/lib/invoice-utils"
@@ -383,6 +384,12 @@ export default function EditInvoice({ invoice, clients }: EditInvoiceProps) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <a href={`/invoices/${invoice.id}/download_pdf`} download>
+                        <Download className="mr-2 h-4 w-4" />
+                        Download PDF
+                      </a>
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleDuplicate}>
                       <Copy className="mr-2 h-4 w-4" />
                       Duplicate Invoice

@@ -17,7 +17,7 @@ InvoiceForge is a single-user invoicing application prioritizing "Neo-Editorial 
   - Models (Client, Invoice, LineItem, User): ✅ Complete
   - Controllers (Dashboard, Clients with real data): ✅ Complete
   - Email Setup (InvoiceMailer templates): ✅ Complete
-  - PDF Generation: ❌ Pending
+  - PDF Generation (Prawn): ✅ Complete
   - Stripe Integration: ❌ Pending
 
 ## 2. Technical Architecture & Standards
@@ -60,6 +60,7 @@ InvoiceForge is a single-user invoicing application prioritizing "Neo-Editorial 
 | | Client Model | ✅ Done | With validations & computed fields |
 | | Invoice Model | ✅ Done | Status workflow, totals calculation |
 | | LineItem Model | ✅ Done | Item types, position ordering |
+| | PDF Generation | ✅ Done | `InvoicePdfGenerator` with Prawn |
 | **Shell** | `AppLayout` | ✅ Done | Correct "well" background structure. |
 | | `Sidebar` / `MobileNav` | ✅ Done | Responsive logic works. |
 | | `ThemeToggle` | ✅ Done | Light/dark with persistence. |
@@ -116,7 +117,6 @@ open http://localhost:3000
 
 ## 6. Next Steps (Phase 2 Remaining)
 
-1. **PDF Generation**: Invoice PDF export using Prawn
-2. **Real Payment Integration**: Stripe Elements
-3. **Complete InvoicesController**: Remaining CRUD actions
-4. **Email Sending**: Wire up InvoiceMailer to actions
+1. **Real Payment Integration**: Stripe Elements
+2. **Complete InvoicesController**: Remaining CRUD actions
+3. **Email Sending**: Wire up InvoiceMailer to actions

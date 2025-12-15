@@ -17,6 +17,7 @@ import type { LineItem } from "@/lib/types"
 
 interface PublicInvoiceShowProps {
   invoice: {
+    token: string
     invoiceNumber: string
     status: 'draft' | 'pending' | 'paid' | 'overdue' | 'cancelled'
     issueDate: string
@@ -169,16 +170,17 @@ export default function PublicInvoiceShow({ invoice }: PublicInvoiceShowProps) {
             Print Invoice
           </Button>
 
-          {/* Download PDF Button (placeholder) */}
+          {/* Download PDF Button */}
           <Button
             size="lg"
             variant="outline"
             className="flex-1 sm:flex-none h-12 text-base gap-2"
-            disabled
-            title="Coming soon"
+            asChild
           >
-            <Download className="h-5 w-5" />
-            Download PDF
+            <a href={`/i/${invoice.token}/download`} download>
+              <Download className="h-5 w-5" />
+              Download PDF
+            </a>
           </Button>
         </div>
 

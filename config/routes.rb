@@ -40,4 +40,7 @@ Rails.application.routes.draw do
   
   # Public invoice view (shareable link)
   get "i/:token", to: "public_invoices#show", as: :public_invoice
+  
+  # Public PDF download (no auth required)
+  get "i/:token/download", to: "public_invoices#download_pdf", as: :public_invoice_download
 end

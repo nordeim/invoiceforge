@@ -2717,3 +2717,33 @@ Processing by DashboardController#index as HTML
 Completed 200 OK in 36ms (Views: 5.0ms | ActiveRecord: 5.2ms (11 queries, 0 cached) | GC: 0.0ms)
 
 
+  [1m[36mInvoice Load (9.5ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."id" DESC LIMIT 1 /*application='Invoiceforge'*/[0m
+  [1m[36mClient Load (2.5ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" = 4 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (2.4ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (0.7ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 ORDER BY "line_items"."position" ASC /*application='Invoiceforge'*/[0m
+  ↳ app/services/invoice_pdf_generator.rb:145:in 'InvoicePdfGenerator#render_line_items'
+  [1m[36mInvoice Load (10.5ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."id" DESC LIMIT 1 /*application='Invoiceforge'*/[0m
+  [1m[36mClient Load (1.4ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" = 4 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (1.5ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (1.1ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 ORDER BY "line_items"."position" ASC /*application='Invoiceforge'*/[0m
+  ↳ app/services/invoice_pdf_generator.rb:145:in 'InvoicePdfGenerator#render_line_items'
+  [1m[36mInvoice Load (9.5ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."id" DESC LIMIT 1 /*application='Invoiceforge'*/[0m
+  [1m[36mClient Load (1.4ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" = 4 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (2.3ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (1.1ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 ORDER BY "line_items"."position" ASC /*application='Invoiceforge'*/[0m
+  ↳ app/services/invoice_pdf_generator.rb:145:in 'InvoicePdfGenerator#render_line_items'
+  [1m[36mInvoice Load (12.4ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."id" DESC LIMIT 1 /*application='Invoiceforge'*/[0m
+  [1m[36mClient Load (1.5ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" = 4 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (2.5ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (1.1ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 ORDER BY "line_items"."position" ASC /*application='Invoiceforge'*/[0m
+  ↳ app/services/invoice_pdf_generator.rb:145:in 'InvoicePdfGenerator#render_line_items'
+  [1m[36mInvoice Load (9.1ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."id" DESC LIMIT 1 /*application='Invoiceforge'*/[0m
+  [1m[36mClient Load (1.6ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" = 4 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (2.2ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (1.1ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 ORDER BY "line_items"."position" ASC /*application='Invoiceforge'*/[0m
+  ↳ app/services/invoice_pdf_generator.rb:145:in 'InvoicePdfGenerator#render_line_items'
+  [1m[36mInvoice Load (11.5ms)[0m  [1m[34mSELECT "invoices".* FROM "invoices" ORDER BY "invoices"."id" DESC LIMIT 1 /*application='Invoiceforge'*/[0m
+  [1m[36mClient Load (1.7ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" = 4 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (1.5ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 /*application='Invoiceforge'*/[0m
+  [1m[36mLineItem Load (1.1ms)[0m  [1m[34mSELECT "line_items".* FROM "line_items" WHERE "line_items"."invoice_id" = 8 ORDER BY "line_items"."position" ASC /*application='Invoiceforge'*/[0m
+  ↳ app/services/invoice_pdf_generator.rb:145:in 'InvoicePdfGenerator#render_line_items'

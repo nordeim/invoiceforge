@@ -516,7 +516,7 @@ InvoiceForge uses a **strict 4px base unit** (Tailwind's default):
 - [x] **ActiveRecord Models**: Client, Invoice, LineItem, User
 - [x] **Real Data Integration**: Dashboard, Clients, Invoices using database
 - [x] **Email Templates**: InvoiceMailer with HTML/text templates
-- [ ] **PDF Generation**: Prawn or wicked_pdf for professional exports
+- [x] **PDF Generation**: Prawn-based invoice PDF export
 - [ ] **Stripe Integration**: Real payment processing
 
 ### Phase 3: Payment Processing

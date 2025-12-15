@@ -339,7 +339,7 @@ end
 | **Controllers** | ⚙️ Partial | Dashboard, Clients complete; Invoices needs remaining actions |
 | **Authentication** | ✅ Complete | Devise with session-based auth |
 | **Payments** | ❌ Pending | Mock PaymentModal exists, Stripe integration needed |
-| **PDF Generation** | ❌ Pending | Prawn gem installed, implementation pending |
+| **PDF Generation** | ✅ Complete | Prawn-based InvoicePdfGenerator service |
 | **Email** | ⚙️ Partial | InvoiceMailer templates created, not wired to actions |
 
 ---
@@ -348,19 +348,15 @@ end
 
 ### 5.1 Priority Order
 
-1. **PDF Generation** (High Priority)
-   - Implement Prawn-based invoice PDF export
-   - Add download button to invoice views
-
-2. **Stripe Integration** (High Priority)
+1. **Stripe Integration** (High Priority)
    - Replace mock PaymentModal with Stripe Elements
    - Webhook handling for payment status
 
-3. **Complete InvoicesController** (Medium Priority)
+2. **Complete InvoicesController** (Medium Priority)
    - Wire up remaining CRUD actions
    - Add mark_paid, mark_sent, cancel actions
 
-4. **Email Wiring** (Medium Priority)
+3. **Email Wiring** (Medium Priority)
    - Connect InvoiceMailer to invoice actions
    - Send on invoice creation/update
 
